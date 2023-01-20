@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "Simple Mouse Gestures",
+  "description": "Extension that provides mouse gestures",
+  "version": "0.1",
+  "icons": {
+    "16": "images/icon-16.png",
+    "32": "images/icon-32.png",
+    "48": "images/icon-48.png",
+    "128": "images/icon-128.png"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "scripts/consts.js",
+        "scripts/utils.js",
+        "scripts/directions-handler.js",
+        "scripts/canvas-builder.js",
+        "scripts/canvas-event-handler.js",
+        "scripts/canvas-handler.js",
+        "scripts/content.js"
+      ],
+      "matches": [
+        "*://*/*"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "permissions": [
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://*/*"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html"
+  },
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "author": "lukasz.rydzkowski@gmail.com"
+}
