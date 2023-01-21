@@ -12,13 +12,13 @@
   "content_scripts": [
     {
       "js": [
-        "scripts/consts.js",
-        "scripts/utils.js",
-        "scripts/directions-handler.js",
-        "scripts/canvas-builder.js",
-        "scripts/canvas-event-handler.js",
-        "scripts/canvas-handler.js",
-        "scripts/content.js"
+        "content-scripts/consts.js",
+        "content-scripts/utils.js",
+        "content-scripts/directions-handler.js",
+        "content-scripts/canvas-builder.js",
+        "content-scripts/canvas-event-handler.js",
+        "content-scripts/canvas-handler.js",
+        "content.js"
       ],
       "matches": [
         "*://*/*"
@@ -36,7 +36,8 @@
     "default_popup": "popup/popup.html"
   },
   "background": {
-    "service_worker": "service-worker.js"
+    "service_worker": "service-worker.js",
+    "type": "module"
   },
   "author": "lukasz.rydzkowski@gmail.com"
 }

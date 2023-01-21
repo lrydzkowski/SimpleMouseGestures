@@ -2,9 +2,12 @@ class DirectionsHandler {
   #directions;
   #position;
 
+  constructor() {
+    this.#reset();
+  }
+
   initPosition(event) {
-    this.#directions = [];
-    this.#resetPosition();
+    this.#reset();
     this.#position.curr.x = event.clientX;
     this.#position.curr.y = event.clientY;
   }
@@ -23,7 +26,8 @@ class DirectionsHandler {
     return this.#directions;
   }
 
-  #resetPosition() {
+  #reset() {
+    this.#directions = [];
     this.#position = {
       prev: {
         x: -1,
