@@ -1,14 +1,18 @@
 import { ScriptsInjector } from '/service-worker-scripts/scripts-injector.js';
 import { OperationResolver } from '/service-worker-scripts/operation-resolver.js';
+import { Storage } from '/service-worker-scripts/storage.js';
+
+const scriptsInjector = new ScriptsInjector();
+const storage = new Storage();
+const operationResolver = new OperationResolver(storage);
 
 chrome.runtime.onInstalled.addListener(async () => {
-  await new ScriptsInjector().injectAsync();
+  await scriptsInjector.injectAsync();
+  await storage.initAsync();
 });
 
 chrome.runtime.onMessage.addListener(
   async function (message, sender, sendResponse) {
-    const directions = message.directions;
-    const operationResolver = new OperationResolver();
-    await operationResolver.resolveAsync(directions);
+    await operationResolver.resolveAsync(message.directions);
   }
 );

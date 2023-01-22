@@ -9,6 +9,8 @@ import { CloseWindowOperation } from '/service-worker-scripts/operations/close-w
 import { MinimizeWindowOperation } from '/service-worker-scripts/operations/minimize-window-operation.js';
 
 export class OperationResolver {
+  #storage;
+
   #operations = {
     goBack: {
       operation: new GoBackOperation(),
@@ -57,16 +59,8 @@ export class OperationResolver {
     }
   }
 
-  #map = {
-    'left': 'goBack',
-    'right': 'goForward',
-    'up': 'openNewTab',
-    'down': 'closeCurrentTab',
-    'up|down': 'reloadCurrentTab',
-    'up|left': 'switchToLeftTab',
-    'up|right': 'switchToRightTab',
-    'left|down|right': 'closeWindow',
-    'down|left': 'minimizeWindow'
+  constructor(storage) {
+    this.#storage = storage;
   }
 
   getList() {
@@ -84,23 +78,24 @@ export class OperationResolver {
     return elements;
   }
 
+  getOperationLabel(operationKey) {
+    return this.#operations[operationKey]?.label;
+  }
+
   async resolveAsync(directions) {
     const serializedDirections = this.#serializeDirections(directions);
 
-    if (!this.#map.hasOwnProperty(serializedDirections)) {
-      console.warn(serializedDirections);
-
+    const operationKey = this.#storage.get(serializedDirections);
+    if (operationKey === undefined) {
       return;
     }
 
-    if (!this.#operations.hasOwnProperty(this.#map[serializedDirections])) {
-      console.warn(serializedDirections);
-      
+    if (!this.#operations.hasOwnProperty(operationKey)) {
       return;
     }
 
-    const el = this.#operations[this.#map[serializedDirections]];
-    el.isAsync ? await el.operation.doAsync() : el.operation.do();
+    const element = this.#operations[operationKey];
+    element.isAsync ? await element.operation.doAsync() : element.operation.do();
   }
 
   #serializeDirections(directions) {

@@ -33,7 +33,6 @@ class ContentEventHandler {
   }
 
   #handleMouseDown(event, directionsHandler, canvasHandler) {
-    console.log('mousedown');
     if (event.button !== Consts.rightButton) {
       return;
     }

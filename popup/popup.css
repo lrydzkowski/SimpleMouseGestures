@@ -19,9 +19,8 @@ button {
   margin-bottom: 20px;
 }
 .list .list-content {
-  border-bottom: 1px dashed #000;
   overflow: auto;
-  max-height: 400px;
+  max-height: 500px;
 }
 .list .row {
   align-items: center;
@@ -30,9 +29,6 @@ button {
   display: flex;
   height: 40px;
   width: 500px;
-}
-.list .row:last-of-type {
-  border-bottom: 0px;
 }
 .list .row .delete-button {
   cursor: pointer;
