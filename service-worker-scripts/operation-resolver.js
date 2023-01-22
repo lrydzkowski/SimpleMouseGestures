@@ -40,6 +40,9 @@ export class OperationResolver {
       case 'down|left':
         await new MinimizeWindowOperation().doAsync();
         break;
+      default:
+        console.warn(serializedDirections);
+        break;
     }
   }
 

@@ -13,8 +13,13 @@ class DirectionsHandler {
   }
 
   registerEvent() {
+    let eventCounter = 1;
     addEventListener('mousemove', (event) => {
       if (event.buttons !== Consts.rightButton) {
+        return;
+      }
+
+      if (eventCounter++ % 4 !== 0) {
         return;
       }
 
