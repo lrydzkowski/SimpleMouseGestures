@@ -18,6 +18,7 @@
         "content-scripts/canvas-builder.js",
         "content-scripts/canvas-event-handler.js",
         "content-scripts/canvas-handler.js",
+        "content-scripts/content-event-handler.js",
         "content.js"
       ],
       "matches": [

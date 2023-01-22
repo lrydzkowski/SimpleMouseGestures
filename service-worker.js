@@ -1,20 +1,9 @@
+import { ScriptsInjector } from '/service-worker-scripts/scripts-injector.js';
 import { OperationResolver } from '/service-worker-scripts/operation-resolver.js';
 
-// async function injectScripts() {
-//   for (const cs of chrome.runtime.getManifest().content_scripts) {
-//     for (const tab of await chrome.tabs.query({url: cs.matches})) {
-//       chrome.scripting.executeScript({
-//         target: {tabId: tab.id},
-//         files: cs.js,
-//       });
-//     }
-//   }
-// }
-
-// chrome.runtime.onInstalled.addListener(async () => {
-//   console.log('onInstalled');
-//   await injectScripts();
-// });
+chrome.runtime.onInstalled.addListener(async () => {
+  await new ScriptsInjector().injectAsync();
+});
 
 chrome.runtime.onMessage.addListener(
   async function (message, sender, sendResponse) {
