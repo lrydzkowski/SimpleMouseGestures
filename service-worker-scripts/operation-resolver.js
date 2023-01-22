@@ -6,6 +6,7 @@ import { ReloadCurrentTabOperation } from '/service-worker-scripts/operations/re
 import { SwitchToLeftTabOperation } from '/service-worker-scripts/operations/switch-to-left-tab-operation.js';
 import { SwitchToRightTabOperation } from '/service-worker-scripts/operations/switch-to-right-tab-operation.js';
 import { CloseWindowOperation } from '/service-worker-scripts/operations/close-window-operation.js';
+import { MinimizeWindowOperation } from '/service-worker-scripts/operations/minimize-window-operation.js';
 
 export class OperationResolver {
   async resolveAsync(directions) {
@@ -35,6 +36,9 @@ export class OperationResolver {
         break;
       case 'left|down|right':
         await new CloseWindowOperation().doAsync();
+        break;
+      case 'down|left':
+        await new MinimizeWindowOperation().doAsync();
         break;
     }
   }
