@@ -14,10 +14,6 @@ export class Storage {
   #map;
 
   async initAsync() {
-    if (this.#map !== undefined) {
-      return;
-    }
-
     const map = await this.#getFromStorageAsync();
     if (map !== undefined) {
       this.#map = map;
@@ -30,7 +26,7 @@ export class Storage {
   }
 
   get(directions) {
-    if (!this.#map.hasOwnProperty(directions)) {
+    if (!this.#map?.hasOwnProperty(directions)) {
       return;
     }
 
@@ -48,21 +44,17 @@ export class Storage {
     await this.#saveInStorageAsync(this.#map);
   }
 
-  directionExists(directions) {
-    return this.#map.hasOwnProperty(directions);
-  }
-
-  operationKeyExists(operationKey) {
-    for (const directions in this.#map) {
-      if (Object.hasOwnProperty.call(this.#map, directions)) {
-        const operationKeyInMap = this.#map[directions];
-        if (operationKeyInMap === operationKey) {
-          return true;
-        }
-      }
+  async deleteAsync(directions) {
+    if (!this.#map?.hasOwnProperty(directions)) {
+      return;
     }
 
-    return false;
+    delete this.#map[directions];
+    await this.#saveInStorageAsync(this.#map);
+  }
+
+  directionExists(directions) {
+    return this.#map.hasOwnProperty(directions);
   }
 
   async #getFromStorageAsync() {

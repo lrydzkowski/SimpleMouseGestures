@@ -11,7 +11,7 @@ import { MinimizeWindowOperation } from '/service-worker-scripts/operations/mini
 export class OperationResolver {
   #storage;
 
-  #operations = {
+  static operations = {
     goBack: {
       operation: new GoBackOperation(),
       label: 'Go Back',
@@ -63,38 +63,22 @@ export class OperationResolver {
     this.#storage = storage;
   }
 
-  getList() {
-    const elements = [];
-    for (const operationKey in this.#operations) {
-      if (Object.hasOwnProperty.call(this.#operations, operationKey)) {
-        const element = this.#operations[operationKey];
-        elements.push({
-          value: operationKey,
-          label: element.label
-        });
-      }
-    }
-
-    return elements;
-  }
-
-  getOperationLabel(operationKey) {
-    return this.#operations[operationKey]?.label;
-  }
-
   async resolveAsync(directions) {
     const serializedDirections = this.#serializeDirections(directions);
+    console.log(serializedDirections);
 
     const operationKey = this.#storage.get(serializedDirections);
+    console.log(operationKey);
     if (operationKey === undefined) {
       return;
     }
 
-    if (!this.#operations.hasOwnProperty(operationKey)) {
+    if (!OperationResolver.operations.hasOwnProperty(operationKey)) {
       return;
     }
 
-    const element = this.#operations[operationKey];
+    const element = OperationResolver.operations[operationKey];
+    console.log(element);
     element.isAsync ? await element.operation.doAsync() : element.operation.do();
   }
 

@@ -15,12 +15,14 @@ class ContentEventHandler {
   }
 
   registerEvents() {
+    console.log('registerEvents');
     addEventListener('mousedown', this.#mouseDownHandler);
     addEventListener('mouseup', this.#mouseUpHandler);
     addEventListener('contextmenu', this.#contextMenuHandler);
   }
 
   #removeEvents() {
+    console.log('removeEvents');
     removeEventListener('mousedown', this.#mouseDownHandler);
     removeEventListener('mouseup', this.#mouseUpHandler);
     removeEventListener('contextmenu', this.#contextMenuHandler);
@@ -62,11 +64,15 @@ class ContentEventHandler {
   }
 
   #handleContextMenu(event, directionsHandler) {
+    console.log('contextMenu');
+    console.log(event);
     if (event.button !== Consts.rightButton) {
       return;
     }
 
     const directions = directionsHandler.getDirections();
+    console.log(directions);
+    console.log(chrome.runtime?.id);
     if (directions.length === 0) {
       return;
     }
@@ -78,6 +84,6 @@ class ContentEventHandler {
       return;
     }
 
-    chrome.runtime.sendMessage({ directions });
+    chrome.runtime.sendMessage({ directions, type: 'directions' });
   }
 }
