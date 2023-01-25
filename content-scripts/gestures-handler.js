@@ -2,33 +2,53 @@ class GesturesHandler {
   #gestures;
   #position;
 
+  #mousemoveHandler;
+
+  #eventCounter = 1;
+
   constructor() {
+    this.#mousemoveHandler = this.#createMousemoveHandler();
     this.#reset();
   }
 
   initPosition(event) {
+    this.#eventCounter = 1;
     this.#reset();
     this.#position.curr.x = event.clientX;
     this.#position.curr.y = event.clientY;
-  }
-
-  registerEvent() {
-    let eventCounter = 1;
-    addEventListener('mousemove', (event) => {
-      if (event.buttons !== Consts.rightButton) {
-        return;
-      }
-
-      if (eventCounter++ % 4 !== 0) {
-        return;
-      }
-
-      this.#recordGesture(event);
-    });
+    this.#registerEvent();
   }
 
   getGestures() {
+    this.#unregisterEvent();
+
     return this.#gestures;
+  }
+
+  #registerEvent() {
+    addEventListener('mousemove', this.#mousemoveHandler);
+  }
+
+  #unregisterEvent() {
+    removeEventListener('mousemove', this.#mousemoveHandler);
+  }
+
+  #createMousemoveHandler() {
+    return (event) => {
+      this.#handleMousemoveEvent(event, this);
+    }
+  }
+
+  #handleMousemoveEvent(event, gesturesHandler) {
+    if (event.buttons !== Consts.rightButton) {
+      return;
+    }
+
+    if (gesturesHandler.#eventCounter++ % 3 !== 0) {
+      return;
+    }
+
+    this.#recordGesture(event);
   }
 
   #reset() {
