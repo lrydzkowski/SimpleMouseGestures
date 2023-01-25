@@ -25,12 +25,12 @@ export class Storage {
     await this.#saveInStorageAsync(this.#map);
   }
 
-  get(directions) {
-    if (!this.#map?.hasOwnProperty(directions)) {
+  get(gestures) {
+    if (!this.#map?.hasOwnProperty(gestures)) {
       return;
     }
 
-    return this.#map[directions];
+    return this.#map[gestures];
   }
 
   async getAllAsync() {
@@ -39,22 +39,22 @@ export class Storage {
     return { ...this.#map };
   }
 
-  async saveAsync(directions, operationKey) {
-    this.#map[directions] = operationKey;
+  async saveAsync(gestures, operationKey) {
+    this.#map[gestures] = operationKey;
     await this.#saveInStorageAsync(this.#map);
   }
 
-  async deleteAsync(directions) {
-    if (!this.#map?.hasOwnProperty(directions)) {
+  async deleteAsync(gestures) {
+    if (!this.#map?.hasOwnProperty(gestures)) {
       return;
     }
 
-    delete this.#map[directions];
+    delete this.#map[gestures];
     await this.#saveInStorageAsync(this.#map);
   }
 
-  directionExists(directions) {
-    return this.#map.hasOwnProperty(directions);
+  gestureExists(gestures) {
+    return this.#map.hasOwnProperty(gestures);
   }
 
   async #getFromStorageAsync() {

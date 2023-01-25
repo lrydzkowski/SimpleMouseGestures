@@ -6,10 +6,14 @@ class Consts {
   static arrowRight = 'ArrowRight';
   static arrowDown = 'ArrowDown';
   static arrowLeft = 'ArrowLeft';
-  static direction = {
+  static gesture = {
     up: 'up',
     right: 'right',
     down: 'down',
     left: 'left'
+  };
+  static messageTypes = {
+    gestures: 'gestures',
+    updateStorage: 'updateStorage'
   };
 }

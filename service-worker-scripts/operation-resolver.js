@@ -63,11 +63,11 @@ export class OperationResolver {
     this.#storage = storage;
   }
 
-  async resolveAsync(directions) {
-    const serializedDirections = this.#serializeDirections(directions);
-    console.log(serializedDirections);
+  async resolveAsync(gestures) {
+    const serializedGestures = this.#serializeGestures(gestures);
+    console.log(serializedGestures);
 
-    const operationKey = this.#storage.get(serializedDirections);
+    const operationKey = this.#storage.get(serializedGestures);
     console.log(operationKey);
     if (operationKey === undefined) {
       return;
@@ -82,7 +82,7 @@ export class OperationResolver {
     element.isAsync ? await element.operation.doAsync() : element.operation.do();
   }
 
-  #serializeDirections(directions) {
-    return directions.join('|');
+  #serializeGestures(gestures) {
+    return gestures.join('|');
   }
 }

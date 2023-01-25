@@ -1,5 +1,5 @@
-class DirectionsHandler {
-  #directions;
+class GesturesHandler {
+  #gestures;
   #position;
 
   constructor() {
@@ -23,16 +23,16 @@ class DirectionsHandler {
         return;
       }
 
-      this.#recordDirection(event);
+      this.#recordGesture(event);
     });
   }
 
-  getDirections() {
-    return this.#directions;
+  getGestures() {
+    return this.#gestures;
   }
 
   #reset() {
-    this.#directions = [];
+    this.#gestures = [];
     this.#position = {
       prev: {
         x: -1,
@@ -45,7 +45,7 @@ class DirectionsHandler {
     };
   }
 
-  #recordDirection(event) {
+  #recordGesture(event) {
     this.#position.prev.x = this.#position.curr.x;
     this.#position.prev.y = this.#position.curr.y;
     this.#position.curr.x = event.clientX;
@@ -64,25 +64,25 @@ class DirectionsHandler {
       this.#position.curr.x - this.#position.prev.x) * 180 / Math.PI + 180;
 
     if (this.#isUp(angle)) {
-      this.#addDirection(Consts.direction.up);
+      this.#addGesture(Consts.gesture.up);
       
       return;
     }
 
     if (this.#isRight(angle)) {
-      this.#addDirection(Consts.direction.right);
+      this.#addGesture(Consts.gesture.right);
 
       return;
     }
 
     if (this.#isDown(angle)) {
-      this.#addDirection(Consts.direction.down);
+      this.#addGesture(Consts.gesture.down);
 
       return;
     }
 
     if (this.#isLeft(angle)) {
-      this.#addDirection(Consts.direction.left);
+      this.#addGesture(Consts.gesture.left);
 
       return;
     }
@@ -128,17 +128,17 @@ class DirectionsHandler {
     return false;
   }
 
-  #addDirection(direction) {
-    if (this.#directions.length === 0) {
-      this.#directions.push(direction);
+  #addGesture(gesture) {
+    if (this.#gestures.length === 0) {
+      this.#gestures.push(gesture);
 
       return;
     }
 
-    if (this.#directions[this.#directions.length - 1] === direction) {
+    if (this.#gestures[this.#gestures.length - 1] === gesture) {
       return;
     }
 
-    this.#directions.push(direction);
+    this.#gestures.push(gesture);
   }
 }

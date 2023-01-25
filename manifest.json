@@ -14,7 +14,7 @@
       "js": [
         "consts.js",
         "content-scripts/utils.js",
-        "content-scripts/directions-handler.js",
+        "content-scripts/gestures-handler.js",
         "content-scripts/canvas-builder.js",
         "content-scripts/canvas-event-handler.js",
         "content-scripts/canvas-handler.js",

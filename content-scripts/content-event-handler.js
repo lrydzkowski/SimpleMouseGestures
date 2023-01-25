@@ -1,5 +1,5 @@
 class ContentEventHandler {
-  #directionsHandler;
+  #gesturesHandler;
   #canvasHandler;
 
   #mouseDownHandler;
@@ -8,8 +8,8 @@ class ContentEventHandler {
 
   #blockDefaultContextMenu = false;
   
-  constructor(directionsHandler, canvasHandler) {
-    this.#directionsHandler = directionsHandler;
+  constructor(gesturesHandler, canvasHandler) {
+    this.#gesturesHandler = gesturesHandler;
     this.#canvasHandler = canvasHandler;
     this.#mouseDownHandler = this.#createMouseDownHandler();
     this.#mouseUpHandler = this.#createMouseUpHandler();
@@ -32,16 +32,16 @@ class ContentEventHandler {
 
   #createMouseDownHandler() {
     return (event) => {
-      this.#handleMouseDown(event, this.#directionsHandler, this.#canvasHandler);
+      this.#handleMouseDown(event, this.#gesturesHandler, this.#canvasHandler);
     }
   }
 
-  #handleMouseDown(event, directionsHandler, canvasHandler) {
+  #handleMouseDown(event, gesturesHandler, canvasHandler) {
     if (event.button !== Consts.rightButton) {
       return;
     }
 
-    directionsHandler.initPosition(event);
+    gesturesHandler.initPosition(event);
     canvasHandler.addToDom();
   }
 
@@ -57,9 +57,9 @@ class ContentEventHandler {
     }
 
     canvasHandler.removeFromDom();
-    const directions = directionsHandler.getDirections();
-    console.log(directions);
-    if (directions.length === 0) {
+    const gestures = gesturesHandler.getGestures();
+    console.log(gestures);
+    if (gestures.length === 0) {
       return;
     }
 
@@ -70,7 +70,7 @@ class ContentEventHandler {
     }
 
     this.#blockDefaultContextMenu = true;
-    chrome.runtime.sendMessage({ directions, type: 'directions' });
+    chrome.runtime.sendMessage({ gestures, type: Consts.messageTypes.gestures });
   }
 
   #createContextMenuHandler() {

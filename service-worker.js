@@ -15,8 +15,8 @@ chrome.runtime.onMessage.addListener(
   async function (message, sender, sendResponse) {
     console.log(message);
     switch (message.type) {
-      case 'directions':
-        await operationResolver.resolveAsync(message.directions);
+      case 'gestures':
+        await operationResolver.resolveAsync(message.gestures);
         break;
       case 'updateStorage':
         await storage.initAsync();

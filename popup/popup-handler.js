@@ -7,60 +7,48 @@ export class PopupHandler {
   constructor(storage, gesturesSerializer) {
     this.#storage = storage;
     this.#gesturesSerializer = gesturesSerializer;
-    this.#initEventSelect();
   }
 
-  registerEvents() {
-    this.#registerAddButtonEvent();
-    this.#registerGestureInputEvent();
-    this.#registerDeleteButtonsEvent();
+  async initAsync() {
+    this.#initOperationSelect();
+    this.#registerEvents();
+    this.#restoreListAsync();
   }
 
-  async restoreListAsync() {
-    const allGestures = await this.#storage.getAllAsync();
-    for (const gesture in allGestures) {
-      if (Object.hasOwnProperty.call(allGestures, gesture)) {
-        const eventValue = allGestures[gesture];
-        this.#createRow(
-          this.#gesturesSerializer.serialize(gesture),
-          this.#getOperationLabel(eventValue)
-        );
-      }
-    }
-  }
-
-  #getOperationLabel(operationKey) {
-    return OperationResolver.operations[operationKey]?.label;
-  }
-
-  #initEventSelect() {
-    const eventSelect = document.querySelector('#event-select');
-    const elements = this.#getOperationList();
-    for (const element of elements) {
-      this.#addEventOption(eventSelect, element);
+  #initOperationSelect() {
+    const operationSelect = document.querySelector('#operation-select');
+    const operations = this.#getOperationList();
+    for (const operation of operations) {
+      this.#addOperationOption(operationSelect, operation);
     }
   }
 
   #getOperationList() {
-    const elements = [];
+    const operations = [];
     for (const operationKey in OperationResolver.operations) {
       if (Object.hasOwnProperty.call(OperationResolver.operations, operationKey)) {
-        const element = OperationResolver.operations[operationKey];
-        elements.push({
+        const operation = OperationResolver.operations[operationKey];
+        operations.push({
           value: operationKey,
-          label: element.label
+          label: operation.label
         });
       }
     }
 
-    return elements;
+    return operations;
   }
 
-  #addEventOption(eventSelect, element) {
+  #addOperationOption(operationSelect, operation) {
     const option = document.createElement('option');
-    option.value = element.value;
-    option.text = element.label;
-    eventSelect.append(option);
+    option.value = operation.value;
+    option.text = operation.label;
+    operationSelect.append(option);
+  }
+
+  #registerEvents() {
+    this.#registerAddButtonEvent();
+    this.#registerGestureInputEvent();
+    this.#registerDeleteButtonsEvent();
   }
 
   #registerAddButtonEvent() {
@@ -79,6 +67,24 @@ export class PopupHandler {
     const gestureInput = document.querySelector('.gesture-input');
     gestureInput.addEventListener('keydown', async (event) => {
       await this.#handleGestureInputEventAsync(event);
+    });
+  }
+
+  #registerDeleteButtonsEvent() {
+    const deleteButtons = document.querySelectorAll('.delete-button');
+    for (const deleteButton of deleteButtons) {
+      this.#registerDeleteButtonEvent(deleteButton);
+    }
+  }
+
+  #registerDeleteButtonEvent(deleteButton) {
+    deleteButton.addEventListener('mousedown', async (event) => {
+      if (event.button !== Consts.leftButton) {
+        return;
+      }
+
+      const parentNode = event.target.parentNode;
+      await this.#handleDeleteRowEventAsync(parentNode);
     });
   }
 
@@ -117,30 +123,12 @@ export class PopupHandler {
     }
   }
 
-  #registerDeleteButtonsEvent() {
-    const deleteButtons = document.querySelectorAll('.delete-button');
-    for (const deleteButton of deleteButtons) {
-      this.#addDeleteButtonEvent(deleteButton);
-    }
-  }
-
-  #addDeleteButtonEvent(deleteButton) {
-    deleteButton.addEventListener('mousedown', async (event) => {
-      if (event.button !== Consts.leftButton) {
-        return;
-      }
-
-      const parentNode = event.target.parentNode;
-      await this.#handleDeleteRowEventAsync(parentNode);
-    });
-  }
-
   async #handleCreateRowEventAsync(rowNode) {
     const allowedChars = ['U', 'R', 'D', 'L'];
     
     const gestureInput = rowNode.querySelector('.gesture-input');
     const gestureValue = gestureInput.value.trim().toUpperCase();
-    const eventValue = rowNode.querySelector('#event-select').value;
+    const operationValue = rowNode.querySelector('#operation-select').value;
 
     if (gestureValue.length === 0) {
       this.#showValidationError('Gesture cannot be empty.', gestureInput);
@@ -149,7 +137,7 @@ export class PopupHandler {
     }
 
     if (gestureValue.length > 8) {
-      this.#showValidationError('You cannot have a gesture with more than 8 directions.', gestureInput);
+      this.#showValidationError('You cannot have a gesture with more than 8 elements.', gestureInput);
 
       return;
     }
@@ -174,21 +162,38 @@ export class PopupHandler {
     }
 
     const deserializedGestureValue = this.#gesturesSerializer.deserialize(gestureValue);
-    if (await this.#storage.directionExistsAsync(deserializedGestureValue)) {
+    if (await this.#storage.gestureExistsAsync(deserializedGestureValue)) {
       this.#showValidationError(`Gesture ${deserializedGestureValue} exists.`, gestureInput);
 
       return;
     }
 
-    this.#createRow(gestureValue, this.#getOperationLabel(eventValue));
+    this.#createRow(gestureValue, this.#getOperationLabel(operationValue));
     gestureInput.value = '';
-    await this.#storage.saveAsync(deserializedGestureValue, eventValue);
+    await this.#storage.saveAsync(deserializedGestureValue, operationValue);
   }
 
   async #handleDeleteRowEventAsync(rowNode) {
     const deserializedGestureValue = this.#gesturesSerializer.deserialize(rowNode.dataset.gestureValue);
     await this.#storage.deleteAsync(deserializedGestureValue);
     rowNode.remove();
+  }
+
+  async #restoreListAsync() {
+    const allGestures = await this.#storage.getAllAsync();
+    for (const gesture in allGestures) {
+      if (Object.hasOwnProperty.call(allGestures, gesture)) {
+        const eventValue = allGestures[gesture];
+        this.#createRow(
+          this.#gesturesSerializer.serialize(gesture),
+          this.#getOperationLabel(eventValue)
+        );
+      }
+    }
+  }
+
+  #getOperationLabel(operationKey) {
+    return OperationResolver.operations[operationKey]?.label;
   }
 
   #showValidationError(message, gestureInput) {
@@ -204,7 +209,7 @@ export class PopupHandler {
     const deleteButton = document.createElement('button');
     deleteButton.className = 'delete-button';
     deleteButton.textContent = 'Delete';
-    this.#addDeleteButtonEvent(deleteButton);
+    this.#registerDeleteButtonEvent(deleteButton);
     row.append(deleteButton);
 
     const gestureParagraph = document.createElement('p');

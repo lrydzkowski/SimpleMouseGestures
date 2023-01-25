@@ -8,16 +8,16 @@ export class GesturesSerializer {
     for (const letter of serializedGestures.toLowerCase()) {
       switch (letter) {
         case 'u':
-          gestures.push(Consts.direction.up);
+          gestures.push(Consts.gesture.up);
           break;
         case 'r':
-          gestures.push(Consts.direction.right);
+          gestures.push(Consts.gesture.right);
           break;
         case 'd':
-          gestures.push(Consts.direction.down);
+          gestures.push(Consts.gesture.down);
           break;
         case 'l':
-          gestures.push(Consts.direction.left);
+          gestures.push(Consts.gesture.left);
           break;
       }
     }
