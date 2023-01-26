@@ -1,5 +1,9 @@
 export class GoBackOperation {
-  do() {
-    chrome.tabs.goBack();
+  async doAsync() {
+    try {
+      await chrome.tabs.goBack();
+    } catch (error) {
+      console.error(error);
+    }
   }
 }

@@ -1,5 +1,9 @@
 export class GoForwardOperation {
-  do() {
-    chrome.tabs.goForward();
+  async doAsync() {
+    try {
+      await chrome.tabs.goForward();
+    } catch (error) {
+      console.error(error);
+    }
   }
 }

@@ -14,48 +14,39 @@ export class OperationResolver {
   static operations = {
     goBack: {
       operation: new GoBackOperation(),
-      label: 'Go Back',
-      isAsync: false
+      label: 'Go Back'
     },
     goForward: {
       operation: new GoForwardOperation(),
-      label: 'Go Forward',
-      isAsync: false
+      label: 'Go Forward'
     },
     openNewTab: {
       operation: new OpenNewTabOperation(),
-      label: 'Open New Tab',
-      isAsync: true
+      label: 'Open New Tab'
     },
     closeCurrentTab: {
       operation: new CloseCurrentTabOperation(),
-      label: 'Close Current Tab',
-      isAsync: true
+      label: 'Close Current Tab'
     },
     reloadCurrentTab: {
       operation: new ReloadCurrentTabOperation(),
-      label: 'Reload Current Tab',
-      isAsync: false
+      label: 'Reload Current Tab'
     },
     switchToLeftTab: {
       operation: new SwitchToLeftTabOperation(),
-      label: 'Switch to Left Tab',
-      isAsync: true
+      label: 'Switch to Left Tab'
     },
     switchToRightTab: {
       operation: new SwitchToRightTabOperation(),
-      label: 'Switch to Right Tab',
-      isAsync: true
+      label: 'Switch to Right Tab'
     },
     closeWindow: {
       operation: new CloseWindowOperation(),
-      label: 'Close Window',
-      isAsync: true
+      label: 'Close Window'
     },
     minimizeWindow: {
       operation: new MinimizeWindowOperation(),
-      label: 'Minimize Window',
-      isAsync: true
+      label: 'Minimize Window'
     }
   }
 
@@ -79,7 +70,7 @@ export class OperationResolver {
 
     const element = OperationResolver.operations[operationKey];
     console.log(element);
-    element.isAsync ? await element.operation.doAsync() : element.operation.do();
+    await element.operation.doAsync();
   }
 
   #serializeGestures(gestures) {

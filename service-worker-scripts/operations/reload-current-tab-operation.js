@@ -1,5 +1,5 @@
 export class ReloadCurrentTabOperation {
-  do() {
-    chrome.tabs.reload();
+  async doAsync() {
+    await chrome.tabs.reload();
   }
 }
