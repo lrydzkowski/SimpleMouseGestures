@@ -17,7 +17,6 @@ class ContentEventHandler {
   }
 
   registerEvents() {
-    console.log('registerEvents');
     addEventListener('mousedown', this.#mouseDownHandler);
     addEventListener('mouseup', this.#mouseUpHandler);
     addEventListener('contextmenu', this.#contextMenuHandler);
@@ -51,13 +50,13 @@ class ContentEventHandler {
 
     canvasHandler.removeFromDom();
     const gestures = gesturesHandler.getGestures();
-    console.log(gestures);
+    console.debug(gestures);
     if (gestures.length === 0) {
       return;
     }
 
     if (chrome.runtime?.id === undefined) {
-      console.log('Chrome runtime id is undefined');
+      console.debug('Chrome runtime id is undefined');
 
       return;
     }

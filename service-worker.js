@@ -7,7 +7,7 @@ const operationResolver = new OperationResolver(storage);
 
 chrome.runtime.onMessage.addListener(
   async function (message, sender, sendResponse) {
-    console.log(message);
+    console.debug(message);
     switch (message.type) {
       case 'gestures':
         await operationResolver.resolveAsync(message.gestures);

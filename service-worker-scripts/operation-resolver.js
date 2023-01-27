@@ -56,10 +56,10 @@ export class OperationResolver {
 
   async resolveAsync(gestures) {
     const serializedGestures = this.#serializeGestures(gestures);
-    console.log(serializedGestures);
+    console.debug(serializedGestures);
 
     const operationKey = this.#storage.get(serializedGestures);
-    console.log(operationKey);
+    console.debug(operationKey);
     if (operationKey === undefined) {
       return;
     }
@@ -69,7 +69,7 @@ export class OperationResolver {
     }
 
     const element = OperationResolver.operations[operationKey];
-    console.log(element);
+    console.debug(element);
     await element.operation.doAsync();
   }
 
