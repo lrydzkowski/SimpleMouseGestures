@@ -23,13 +23,6 @@ class ContentEventHandler {
     addEventListener('contextmenu', this.#contextMenuHandler);
   }
 
-  #removeEvents() {
-    console.log('removeEvents');
-    removeEventListener('mousedown', this.#mouseDownHandler);
-    removeEventListener('mouseup', this.#mouseUpHandler);
-    removeEventListener('contextmenu', this.#contextMenuHandler);
-  }
-
   #createMouseDownHandler() {
     return (event) => {
       this.#handleMouseDown(event, this.#gesturesHandler, this.#canvasHandler);
@@ -64,7 +57,7 @@ class ContentEventHandler {
     }
 
     if (chrome.runtime?.id === undefined) {
-      this.#removeEvents();
+      console.log('Chrome runtime id is undefined');
 
       return;
     }
