@@ -3,7 +3,7 @@ export class GoForwardOperation {
     try {
       await chrome.tabs.goForward();
     } catch (error) {
-      console.error(error);
+      console.debug(error);
     }
   }
 }
