@@ -4,15 +4,12 @@ class GesturesHandler {
 
   #mousemoveHandler;
 
-  #eventCounter = 1;
-
   constructor() {
     this.#mousemoveHandler = this.#createMousemoveHandler();
     this.#reset();
   }
 
   initPosition(event) {
-    this.#eventCounter = 1;
     this.#reset();
     this.#position.curr.x = event.clientX;
     this.#position.curr.y = event.clientY;
@@ -35,16 +32,12 @@ class GesturesHandler {
 
   #createMousemoveHandler() {
     return (event) => {
-      this.#handleMousemoveEvent(event, this);
+      this.#handleMousemoveEvent(event);
     }
   }
 
-  #handleMousemoveEvent(event, gesturesHandler) {
+  #handleMousemoveEvent(event) {
     if (event.buttons !== Consts.rightButton) {
-      return;
-    }
-
-    if (gesturesHandler.#eventCounter++ % 3 !== 0) {
       return;
     }
 
