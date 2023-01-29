@@ -1,8 +1,10 @@
 # SimpleMouseGestures
 
-Google Chrome extension that provides mouse gestures.
+Google Chrome extension that provides the ability to define mouse gestures that will run specific actions in your browser.
 
-Actions possible to attach to mouse gestures:
+A mouse gesture can be drawn by moving your mouse cursor with the right mouse button pressed inside your browse window. In settings you can attach a mouse gesture with the specific action.
+
+The list of actions possible to attach to mouse gestures:
 
 - Go Back
 - Go Forward
