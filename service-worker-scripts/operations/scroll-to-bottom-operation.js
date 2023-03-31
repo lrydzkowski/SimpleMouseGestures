@@ -1,16 +1,12 @@
 export class ScrollToBottomOperation {
   async doAsync() {
-    const tabs = await chrome.tabs.query({ currentWindow: true });
-    if (!Array.isArray(tabs)) {
-      return;
-    }
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
-    const activeTabIndex = tabs.findIndex(tab => tab.active === true);
-    if (activeTabIndex === -1) {
-      return;
-    }
-
-    const tab = tabs[activeTabIndex];
-    chrome.tabs.executeScript(tab.id, {code: 'window.scrollTo(0, document.body.scrollHeight);'});
+    tab?.id && await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: async () => {
+        window.scrollTo(0, document.body.scrollHeight);
+      }
+    }) 
   }
 }
