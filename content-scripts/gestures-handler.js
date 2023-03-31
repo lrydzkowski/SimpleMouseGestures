@@ -59,6 +59,10 @@ class GesturesHandler {
   }
 
   #recordGesture(event) {
+    if (!this.#isPositionDifferenceEnough(this.#position.curr, {x: event.clientX, y: event.clientY})) {
+      return;
+    }
+
     this.#position.prev.x = this.#position.curr.x;
     this.#position.prev.y = this.#position.curr.y;
     this.#position.curr.x = event.clientX;
@@ -103,6 +107,18 @@ class GesturesHandler {
 
   #areTheSame(position) {
     if (position.prev.x === position.curr.x && position.prev.y === position.curr.y) {
+      return true;
+    }
+
+    return false;
+  }
+
+  #isPositionDifferenceEnough(prevPosition, currPosition) {
+    if (Math.abs(prevPosition.x - currPosition.x) > 3) {
+      return true;
+    }
+
+    if (Math.abs(prevPosition.y - currPosition.y) > 3) {
       return true;
     }
 
