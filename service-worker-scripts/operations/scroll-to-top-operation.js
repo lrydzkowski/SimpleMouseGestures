@@ -1,16 +1,12 @@
 export class ScrollToTopOperation {
   async doAsync() {
-    const tabs = await chrome.tabs.query({ currentWindow: true });
-    if (!Array.isArray(tabs)) {
-      return;
-    }
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
-    const activeTabIndex = tabs.findIndex(tab => tab.active === true);
-    if (activeTabIndex === -1) {
-      return;
-    }
-
-    const tab = tabs[activeTabIndex];
-    chrome.tabs.executeScript(tab.id, {code: 'window.scroll(0, 0);'});
+    tab?.id && await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: () => {
+        window.scrollTo(0, 0);
+      }
+    }) 
   }
 }
