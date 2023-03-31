@@ -15,3 +15,5 @@ The list of actions possible to attach to mouse gestures:
 - Switch to Right Tab
 - Close Window
 - Minimize Window
+- Scroll to top
+- Scroll to bottom
