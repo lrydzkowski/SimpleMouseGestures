@@ -7,6 +7,8 @@ import { SwitchToLeftTabOperation } from '/service-worker-scripts/operations/swi
 import { SwitchToRightTabOperation } from '/service-worker-scripts/operations/switch-to-right-tab-operation.js';
 import { CloseWindowOperation } from '/service-worker-scripts/operations/close-window-operation.js';
 import { MinimizeWindowOperation } from '/service-worker-scripts/operations/minimize-window-operation.js';
+import { ScrollToTopOperation } from '/service-worker-scripts/operations/scroll-to-top-operation.js';
+import { ScrollToBottomOperation } from '/service-worker-scripts/operations/scroll-to-bottom-operation.js';
 
 export class OperationResolver {
   #storage;
@@ -47,7 +49,15 @@ export class OperationResolver {
     minimizeWindow: {
       operation: new MinimizeWindowOperation(),
       label: 'Minimize Window'
-    }
+    },
+    scrollToTop: {
+      operation: new ScrollToTopOperation(),
+      label: 'Scroll to top'
+    },
+    scrollToBottom: {
+      operation: new ScrollToBottomOperation(),
+      label: 'Scroll to bottom'
+    }   
   }
 
   constructor(storage) {

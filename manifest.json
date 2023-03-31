@@ -2,8 +2,8 @@
   "manifest_version": 3,
   "name": "Simple Mouse Gestures",
   "description": "Extension that provides the ability to define mouse gestures that will run specific actions in your Google Chrome browser",
-  "version": "0.1",
-  "version_name": "0.1 beta",
+  "version": "0.2",
+  "version_name": "0.2 beta",
   "icons": {
     "16": "images/icon-16.png",
     "32": "images/icon-32.png",
@@ -23,14 +23,18 @@
         "content.js"
       ],
       "matches": [
-        "*://*/*"
+        "<all_urls>"
       ],
       "run_at": "document_start",
       "all_frames": true
     }
   ],
   "permissions": [
+    "scripting",
     "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
   ],
   "action": {
     "default_popup": "popup/popup.html"

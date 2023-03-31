@@ -9,7 +9,9 @@ export class Storage {
     'up|left': 'switchToLeftTab',
     'up|right': 'switchToRightTab',
     'left|down|right': 'closeWindow',
-    'down|left': 'minimizeWindow'
+    'down|left': 'minimizeWindow',
+    'left|up': 'scrollToTop',
+    'left|down': 'scrollToBottom'
   };
   #map;
 
