@@ -5,8 +5,8 @@ export class ScrollToBottomOperation {
     tab?.id && await chrome.scripting.executeScript({
       target: { tabId: tab.id },
       func: async () => {
-        window.scrollTo(0, document.body.scrollHeight);
+        window.scrollTo({ left: 0, top: document.documentElement.scrollHeight });
       }
-    }) 
+    })
   }
 }
