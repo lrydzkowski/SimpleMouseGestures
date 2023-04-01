@@ -14,6 +14,7 @@ class ContentEventHandler {
     this.#mouseDownHandler = this.#createMouseDownHandler();
     this.#mouseUpHandler = this.#createMouseUpHandler();
     this.#contextMenuHandler = this.#createContextMenuHandler();
+    this.#gesturesHandler.addStartRecordingGestureEventHandler(() => this.#canvasHandler.addToDom());
   }
 
   registerEvents() {
@@ -24,17 +25,16 @@ class ContentEventHandler {
 
   #createMouseDownHandler() {
     return (event) => {
-      this.#handleMouseDown(event, this.#gesturesHandler, this.#canvasHandler);
+      this.#handleMouseDown(event, this.#gesturesHandler);
     }
   }
 
-  #handleMouseDown(event, gesturesHandler, canvasHandler) {
+  #handleMouseDown(event, gesturesHandler) {
     if (event.button !== Consts.rightButton) {
       return;
     }
 
     gesturesHandler.initPosition(event);
-    canvasHandler.addToDom();
   }
 
   #createMouseUpHandler() {
