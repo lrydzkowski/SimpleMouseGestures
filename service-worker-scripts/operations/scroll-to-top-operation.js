@@ -5,7 +5,7 @@ export class ScrollToTopOperation {
     tab?.id && await chrome.scripting.executeScript({
       target: { tabId: tab.id },
       func: () => {
-        window.scrollTo(0, 0);
+        window.scrollTo({ left: 0, top: 0 });
       }
     }) 
   }
