@@ -52,11 +52,11 @@ export class OperationResolver {
     },
     scrollToTop: {
       operation: new ScrollToTopOperation(),
-      label: 'Scroll to top'
+      label: 'Scroll to Top'
     },
     scrollToBottom: {
       operation: new ScrollToBottomOperation(),
-      label: 'Scroll to bottom'
+      label: 'Scroll to Bottom'
     }   
   }
 
