@@ -17,6 +17,7 @@ button {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
+  width: 500px;
 }
 .list .list-content {
   overflow: auto;
