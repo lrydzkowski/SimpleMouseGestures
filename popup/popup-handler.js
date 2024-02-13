@@ -46,9 +46,30 @@ export class PopupHandler {
   }
 
   #registerEvents() {
+    this.#registerTabEvent();
     this.#registerAddButtonEvent();
     this.#registerGestureInputEvent();
     this.#registerDeleteButtonsEvent();
+  }
+
+  #registerTabEvent() {
+    const headers = document.querySelectorAll('.header');
+    for (const header of headers) {
+      header.addEventListener('mousedown', (event) => {
+        const activeClass = 'active';
+
+        let currentlyActiveHeader = document.querySelector(`.header.${activeClass}`);
+        currentlyActiveHeader.classList.remove(activeClass);
+        let currentlyActiveTab = document.querySelector(`.tab.${activeClass}`);
+        currentlyActiveTab.classList.remove(activeClass);
+
+        let tabName = event.target.getAttribute('data-name');
+        let header = document.querySelector(`.header[data-name="${tabName}"]`);
+        header.classList.add(activeClass);
+        let tab = document.querySelector(`.tab[data-name="${tabName}"]`);
+        tab.classList.add(activeClass);
+      });
+    }
   }
 
   #registerAddButtonEvent() {

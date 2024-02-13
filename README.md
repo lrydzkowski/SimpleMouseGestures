@@ -17,3 +17,7 @@ The list of actions possible to attach to mouse gestures:
 - Minimize Window
 - Scroll to Top
 - Scroll to Bottom
+
+## Dependencies
+
+It uses [Coloris v0.22.0](https://github.com/mdbassit/Coloris)
