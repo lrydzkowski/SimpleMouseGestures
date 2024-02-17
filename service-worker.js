@@ -15,6 +15,9 @@ chrome.runtime.onMessage.addListener(
       case 'updateStorage':
         await storage.initAsync();
         break;
+      case 'getSettings':
+        sendResponse(storage.getSettings());
+        break;
     }
   }
 );

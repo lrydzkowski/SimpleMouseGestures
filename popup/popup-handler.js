@@ -12,7 +12,8 @@ export class PopupHandler {
   async initAsync() {
     this.#initOperationSelect();
     this.#registerEvents();
-    this.#restoreListAsync();
+    await this.#restoreListAsync();
+    await this.#restoreSettingsAsync();
   }
 
   #initOperationSelect() {
@@ -46,9 +47,31 @@ export class PopupHandler {
   }
 
   #registerEvents() {
+    this.#registerTabEvent();
     this.#registerAddButtonEvent();
     this.#registerGestureInputEvent();
     this.#registerDeleteButtonsEvent();
+    this.#registerSaveSettingsButtonEvent();
+  }
+
+  #registerTabEvent() {
+    const headers = document.querySelectorAll('.header');
+    for (const header of headers) {
+      header.addEventListener('mousedown', (event) => {
+        const activeClass = 'active';
+
+        let currentlyActiveHeader = document.querySelector(`.header.${activeClass}`);
+        currentlyActiveHeader.classList.remove(activeClass);
+        let currentlyActiveTab = document.querySelector(`.tab.${activeClass}`);
+        currentlyActiveTab.classList.remove(activeClass);
+
+        let tabName = event.target.getAttribute('data-name');
+        let header = document.querySelector(`.header[data-name="${tabName}"]`);
+        header.classList.add(activeClass);
+        let tab = document.querySelector(`.tab[data-name="${tabName}"]`);
+        tab.classList.add(activeClass);
+      });
+    }
   }
 
   #registerAddButtonEvent() {
@@ -85,6 +108,22 @@ export class PopupHandler {
 
       const parentNode = event.target.parentNode;
       await this.#handleDeleteRowEventAsync(parentNode);
+    });
+  }
+
+  #registerSaveSettingsButtonEvent() {
+    const saveSettingsButton = document.querySelector('#save-settings-button');
+    saveSettingsButton.addEventListener('mousedown', async (event) => {
+      if (event.button !== Consts.leftButton) {
+        return;
+      }
+
+      const settings = {
+        lineColor: document.querySelector('.tab[data-name="settings"] #line-color').value,
+        lineWidth: document.querySelector('.tab[data-name="settings"] #line-width').value
+      };
+      await this.#saveSettingsAsync(settings);
+      this.#showMessage('Settings have been saved. You have to refresh the page to start using new settings.');
     });
   }
 
@@ -170,17 +209,17 @@ export class PopupHandler {
 
     this.#createRow(gestureValue, this.#getOperationLabel(operationValue));
     gestureInput.value = '';
-    await this.#storage.saveAsync(deserializedGestureValue, operationValue);
+    await this.#storage.saveGesturesAsync(deserializedGestureValue, operationValue);
   }
 
   async #handleDeleteRowEventAsync(rowNode) {
     const deserializedGestureValue = this.#gesturesSerializer.deserialize(rowNode.dataset.gestureValue);
-    await this.#storage.deleteAsync(deserializedGestureValue);
+    await this.#storage.deleteGesturesAsync(deserializedGestureValue);
     rowNode.remove();
   }
 
   async #restoreListAsync() {
-    const allGestures = await this.#storage.getAllAsync();
+    const allGestures = await this.#storage.getAllGesturesAsync();
     for (const gesture in allGestures) {
       if (Object.hasOwnProperty.call(allGestures, gesture)) {
         const eventValue = allGestures[gesture];
@@ -197,8 +236,12 @@ export class PopupHandler {
   }
 
   #showValidationError(message, gestureInput) {
-    alert(message);
+    this.#showMessage(message);
     gestureInput.focus();
+  }
+
+  #showMessage(message) {
+    alert(message);
   }
 
   #createRow(gestureValue, eventValue) {
@@ -226,6 +269,18 @@ export class PopupHandler {
     eventParagraph.append(eventValueText);
     row.append(eventParagraph);
 
-    document.querySelector('.list-content').append(row);
+    document.querySelector('.tab[data-name="gestures"] .list-content').append(row);
+  }
+
+  async #restoreSettingsAsync() {
+    const settings = await this.#storage.getSettingsAsync();
+    const lineColorInput = document.querySelector('.tab[data-name="settings"] #line-color');
+    lineColorInput.value = settings.lineColor;
+    lineColorInput.dispatchEvent(new Event('input', { bubbles: true }));
+    document.querySelector('.tab[data-name="settings"] #line-width').value = settings.lineWidth;
+  }
+
+  async #saveSettingsAsync(settings) {
+    await this.#storage.saveSettingsAsync(settings);
   }
 }

@@ -2,11 +2,19 @@ class CanvasEventHandler {
   #canvas;
   #context;
   #position;
+  #lineColor = '#000000';
+  #lineWidth = 2;
 
   constructor(canvas) {
     this.#canvas = canvas;
     this.#context = canvas.getContext('2d');
     this.#resetPosition();
+    const thisRef = this;
+    chrome.runtime.sendMessage({ type: Consts.messageTypes.getSettings }, function (response) {
+      console.debug(response);
+      thisRef.#lineColor = response?.lineColor ?? '#000000';
+      thisRef.#lineWidth = response?.lineWidth ?? 2;
+    });
   }
 
   registerEvent() {
@@ -53,8 +61,8 @@ class CanvasEventHandler {
     this.#context.beginPath();
     this.#context.moveTo(this.#position.prev.x, this.#position.prev.y);
     this.#context.lineTo(this.#position.curr.x, this.#position.curr.y);
-    this.#context.strokeStyle = 'black';
-    this.#context.lineWidth = 2;
+    this.#context.strokeStyle = this.#lineColor;
+    this.#context.lineWidth = this.#lineWidth;
     this.#context.stroke();
     this.#context.closePath();
   }

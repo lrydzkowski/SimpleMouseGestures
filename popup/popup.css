@@ -7,43 +7,116 @@
     Helvetica Neue,
     Arial,
     sans-serif;
+  font-size: 13px;
 }
 button {
+  background-color: #ffffff;
+  border: 1px solid #000000;
   cursor: pointer;
-  height: 25px;
+  height: 26px;
   width: 60px;
 }
-.list {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
+button:hover {
+  background-color: #E6E6E6;
+}
+input {
+  border: 1px solid #000000;
+  box-sizing: border-box;
+  height: 26px;
+}
+select {
+  border: 1px solid #000000;
+  height: 26px;
+}
+
+.content {
   width: 500px;
 }
-.list .list-content {
-  overflow: auto;
-  max-height: 500px;
+
+.headers {
+  display: flex;
+  padding-left: 5px;
 }
-.list .row {
+.headers .header {
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 5px 5px 0 0;
+  border-bottom: 0;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 5px 0px;
+  position: relative;
+  margin: 0px 5px;
+  text-align: center;
+  top: 1px;
+  width: 140px;
+}
+.headers .header.active {
+  font-weight: 500;
+  z-index: 10;
+}
+.headers .header:hover:not(.active) {
+  background-color: #E6E6E6;
+}
+
+.separator {
+  background-color: #000000;
+  height: 1px;
+  position: relative;
+  width: 100%;
+  z-index: 5;
+}
+
+.tab {
+  display: none;
+  min-height: 300px;
+}
+.tab.active {
+  display: block;
+  padding-top: 10px;
+}
+.tab .row {
   align-items: center;
   border-bottom: 1px dashed #000;
   gap: 10px;
   display: flex;
   height: 40px;
+  max-width: 500px;
+}
+
+.tab-content {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
   width: 500px;
 }
-.list .row .delete-button {
+
+.tab[data-name="gestures"] .list-content {
+  overflow: auto;
+  max-height: 451px;
+}
+.tab[data-name="gestures"] .row .delete-button {
   cursor: pointer;
 }
-.list .row .gesture-input {
-  height: 19px;
+.tab[data-name="gestures"] .row .gesture-input {
   width: 45px;
 }
-.list .row .operation-select {
-  height: 25px;
-  width: 200px;
-}
-.list .row label:first-of-type,
-.list .row p:first-of-type {
+.tab[data-name="gestures"] .row label:first-of-type,
+.tab[data-name="gestures"] .row p:first-of-type {
   display: inline-block;
   min-width: 120px;
+}
+
+.tab[data-name="settings"] .row label span {
+  display: inline-block;
+  width: 70px;
+}
+.tab[data-name="settings"] .row #line-color {
+  width: 90px;
+}
+.tab[data-name="settings"] .row #line-width {
+  width: 90px;
+}
+.tab[data-name="settings"] .row:last-of-type {
+  margin-bottom: 15px;
 }

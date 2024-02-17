@@ -14,6 +14,7 @@ class Consts {
   };
   static messageTypes = {
     gestures: 'gestures',
-    updateStorage: 'updateStorage'
+    updateStorage: 'updateStorage',
+    getSettings: 'getSettings'
   };
 }
