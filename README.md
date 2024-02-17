@@ -18,6 +18,11 @@ The list of actions possible to attach to mouse gestures:
 - Scroll to Top
 - Scroll to Bottom
 
+Other settings:
+
+- Line color
+- Line width
+
 ## Dependencies
 
-It uses [Coloris v0.22.0](https://github.com/mdbassit/Coloris)
+It uses [Coloris v0.22.0](https://github.com/mdbassit/Coloris) to choose a line color in settings.
