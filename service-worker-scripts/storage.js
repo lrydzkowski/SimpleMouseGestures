@@ -1,5 +1,5 @@
 export class Storage {
-  #storageKey = 'simpleMouseGesturesData';
+  #mapStorageKey = 'simpleMouseGesturesData';
   #initMap = {
     'left': 'goBack',
     'right': 'goForward',
@@ -15,19 +15,19 @@ export class Storage {
   };
   #map;
 
+  #settingsStorageKey = 'simpleMouseGesturesSettings';
+  #initSettings = {
+    'lineColor': '#000000',
+    'lineWidth': 2
+  };
+  #settings;
+
   async initAsync() {
-    const map = await this.#getFromStorageAsync();
-    if (map !== undefined) {
-      this.#map = map;
-
-      return;
-    }
-
-    this.#map = this.#initMap;
-    await this.#saveInStorageAsync(this.#map);
+    await this.#initMapAsync();
+    await this.#initSettingsAsync();
   }
 
-  get(gestures) {
+  getOperationKey(gestures) {
     if (!this.#map?.hasOwnProperty(gestures)) {
       return;
     }
@@ -35,46 +35,54 @@ export class Storage {
     return this.#map[gestures];
   }
 
-  async getAllAsync() {
-    await this.initAsync();
-
-    return { ...this.#map };
+  getSettings() {
+    return this.#settings;
   }
 
-  async saveAsync(gestures, operationKey) {
-    this.#map[gestures] = operationKey;
-    await this.#saveInStorageAsync(this.#map);
-  }
+  async #initMapAsync() {
+    console.log('initMapAsync');
+    const map = await this.#getFromStorageAsync(this.#mapStorageKey);
+    if (map !== undefined) {
+      this.#map = map;
 
-  async deleteAsync(gestures) {
-    if (!this.#map?.hasOwnProperty(gestures)) {
       return;
     }
 
-    delete this.#map[gestures];
-    await this.#saveInStorageAsync(this.#map);
+    this.#map = this.#initMap;
+    await this.#saveInStorageAsync(this.#mapStorageKey, this.#map);
   }
 
-  gestureExists(gestures) {
-    return this.#map.hasOwnProperty(gestures);
+  async #initSettingsAsync() {
+    const settings = await this.#getFromStorageAsync(this.#settingsStorageKey);
+    if (settings !== undefined) {
+      this.#settings = settings;
+
+      return;
+    }
+
+    this.#settings = this.#initSettings;
+    await this.#saveInStorageAsync(this.#settingsStorageKey, this.#settings);
   }
 
-  async #getFromStorageAsync() {
-    const value = await chrome.storage.local.get([this.#storageKey]);
-    if (!value.hasOwnProperty(this.#storageKey)) {
+  async #getFromStorageAsync(storageKey) {
+    const value = await chrome.storage.local.get([storageKey]);
+    console.log('getFromStorage');
+    console.debug(value);
+    if (!value.hasOwnProperty(storageKey)) {
       return;
     }
 
     try {
-      return JSON.parse(value[this.#storageKey]);
+      return JSON.parse(value[storageKey]);
     } catch (e) {
       console.error(e);
     }
   }
 
-  async #saveInStorageAsync(map) {
+  async #saveInStorageAsync(storageKey, data) {
     const obj = {};
-    obj[this.#storageKey] = JSON.stringify(map);
+    obj[storageKey] = JSON.stringify(data);
+    console.log(obj);
     await chrome.storage.local.set(obj);
   }
 }

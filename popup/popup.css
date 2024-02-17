@@ -117,3 +117,6 @@ select {
 .tab[data-name="settings"] .row #line-width {
   width: 90px;
 }
+.tab[data-name="settings"] .row:last-of-type {
+  margin-bottom: 15px;
+}

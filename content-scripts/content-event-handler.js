@@ -39,11 +39,11 @@ class ContentEventHandler {
 
   #createMouseUpHandler() {
     return (event) => {
-      this.#handleMouseUp(event, this.#canvasHandler);
+      this.#handleMouseUp(event, this.#canvasHandler, this.#gesturesHandler);
     }
   }
 
-  #handleMouseUp(event, canvasHandler) {
+  #handleMouseUp(event, canvasHandler, gesturesHandler) {
     if (event.button !== Consts.rightButton) {
       return;
     }

@@ -68,7 +68,7 @@ export class OperationResolver {
     const serializedGestures = this.#serializeGestures(gestures);
     console.debug(serializedGestures);
 
-    const operationKey = this.#storage.get(serializedGestures);
+    const operationKey = this.#storage.getOperationKey(serializedGestures);
     console.debug(operationKey);
     if (operationKey === undefined) {
       return;
