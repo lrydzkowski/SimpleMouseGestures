@@ -7,16 +7,12 @@ const operationResolver = new OperationResolver(storage);
 
 chrome.runtime.onMessage.addListener(
   async function (message, sender, sendResponse) {
-    console.debug(message);
     switch (message.type) {
       case 'gestures':
         await operationResolver.resolveAsync(message.gestures);
         break;
       case 'updateStorage':
         await storage.initAsync();
-        break;
-      case 'getSettings':
-        sendResponse(storage.getSettings());
         break;
     }
   }

@@ -5,15 +5,14 @@ class CanvasEventHandler {
   #lineColor = '#000000';
   #lineWidth = 2;
 
-  constructor(canvas) {
+  constructor(canvas, storage) {
     this.#canvas = canvas;
     this.#context = canvas.getContext('2d');
     this.#resetPosition();
     const thisRef = this;
-    chrome.runtime.sendMessage({ type: Consts.messageTypes.getSettings }, function (response) {
-      console.debug(response);
-      thisRef.#lineColor = response?.lineColor ?? '#000000';
-      thisRef.#lineWidth = response?.lineWidth ?? 2;
+    storage.getSettingsAsync().then((settings) => {
+      thisRef.#lineColor = settings?.lineColor ?? '#000000';
+      thisRef.#lineWidth = settings?.lineWidth ?? 2;
     });
   }
 
