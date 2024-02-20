@@ -3,7 +3,7 @@ export class GoBackOperation {
     try {
       await chrome.tabs.goBack();
     } catch (error) {
-      console.debug(error);
+      console.error(error);
     }
   }
 }

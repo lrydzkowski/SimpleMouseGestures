@@ -50,7 +50,6 @@ class ContentEventHandler {
 
     canvasHandler.removeFromDom();
     const gestures = gesturesHandler.getGestures();
-    console.debug(gestures);
     if (gestures.length === 0) {
       return;
     }

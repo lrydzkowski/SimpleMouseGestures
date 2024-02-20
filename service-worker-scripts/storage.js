@@ -40,7 +40,6 @@ export class Storage {
   }
 
   async #initMapAsync() {
-    console.log('initMapAsync');
     const map = await this.#getFromStorageAsync(this.#mapStorageKey);
     if (map !== undefined) {
       this.#map = map;
@@ -66,8 +65,6 @@ export class Storage {
 
   async #getFromStorageAsync(storageKey) {
     const value = await chrome.storage.local.get([storageKey]);
-    console.log('getFromStorage');
-    console.debug(value);
     if (!value.hasOwnProperty(storageKey)) {
       return;
     }
@@ -82,7 +79,6 @@ export class Storage {
   async #saveInStorageAsync(storageKey, data) {
     const obj = {};
     obj[storageKey] = JSON.stringify(data);
-    console.log(obj);
     await chrome.storage.local.set(obj);
   }
 }
