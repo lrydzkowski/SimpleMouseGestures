@@ -39,7 +39,7 @@ class GesturesHandler {
   #createMousemoveHandler() {
     return (event) => {
       this.#handleMousemoveEvent(event);
-    }
+    };
   }
 
   #handleMousemoveEvent(event) {
@@ -55,18 +55,23 @@ class GesturesHandler {
     this.#position = {
       prev: {
         x: -1,
-        y: -1
+        y: -1,
       },
       curr: {
         x: -1,
-        y: -1
-      }
+        y: -1,
+      },
     };
     this.#recordingStarted = false;
   }
 
   #recordGesture(event) {
-    if (!this.#isPositionsDifferenceEnough(this.#position.curr, {x: event.clientX, y: event.clientY})) {
+    if (
+      !this.#isPositionsDifferenceEnough(this.#position.curr, {
+        x: event.clientX,
+        y: event.clientY,
+      })
+    ) {
       return;
     }
 
@@ -84,13 +89,14 @@ class GesturesHandler {
       this.#startRecordingGestureHandler();
     }
 
-    let angle = Math.atan2(
-      this.#position.curr.y - this.#position.prev.y,
-      this.#position.curr.x - this.#position.prev.x) * 180 / Math.PI + 180;
+    let angle =
+      (Math.atan2(this.#position.curr.y - this.#position.prev.y, this.#position.curr.x - this.#position.prev.x) * 180) /
+        Math.PI +
+      180;
 
     if (this.#isUp(angle)) {
       this.#addGesture(Consts.gesture.up);
-      
+
       return;
     }
 
@@ -126,7 +132,7 @@ class GesturesHandler {
   }
 
   #canTriggerStartRecordingGestureEvent() {
-    return this.#recordingStarted === false && typeof(this.#startRecordingGestureHandler) === 'function';
+    return this.#recordingStarted === false && typeof this.#startRecordingGestureHandler === 'function';
   }
 
   #isUp(angle) {

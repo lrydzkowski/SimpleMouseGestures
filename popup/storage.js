@@ -1,7 +1,7 @@
 export class Storage {
   #mapStorageKey = 'simpleMouseGesturesData';
   #settingsStorageKey = 'simpleMouseGesturesSettings';
-  
+
   async getAllGesturesAsync() {
     const map = await this.#getFromStorageAsync(this.#mapStorageKey);
 

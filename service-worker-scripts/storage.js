@@ -1,24 +1,24 @@
 export class Storage {
   #mapStorageKey = 'simpleMouseGesturesData';
   #initMap = {
-    'left': 'goBack',
-    'right': 'goForward',
-    'up': 'openNewTab',
-    'down': 'closeCurrentTab',
+    left: 'goBack',
+    right: 'goForward',
+    up: 'openNewTab',
+    down: 'closeCurrentTab',
     'up|down': 'reloadCurrentTab',
     'up|left': 'switchToLeftTab',
     'up|right': 'switchToRightTab',
     'left|down|right': 'closeWindow',
     'down|left': 'minimizeWindow',
     'left|up': 'scrollToTop',
-    'left|down': 'scrollToBottom'
+    'left|down': 'scrollToBottom',
   };
   #map;
 
   #settingsStorageKey = 'simpleMouseGesturesSettings';
   #initSettings = {
-    'lineColor': '#000000',
-    'lineWidth': 2
+    lineColor: '#000000',
+    lineWidth: 2,
   };
   #settings;
 

@@ -31,7 +31,7 @@ export class PopupHandler {
         const operation = OperationResolver.operations[operationKey];
         operations.push({
           value: operationKey,
-          label: operation.label
+          label: operation.label,
         });
       }
     }
@@ -120,7 +120,7 @@ export class PopupHandler {
 
       const settings = {
         lineColor: document.querySelector('.tab[data-name="settings"] #line-color').value,
-        lineWidth: document.querySelector('.tab[data-name="settings"] #line-width').value
+        lineWidth: document.querySelector('.tab[data-name="settings"] #line-width').value,
       };
       await this.#saveSettingsAsync(settings);
       this.#showMessage('Settings have been saved. You have to refresh the page to start using new settings.');
@@ -164,7 +164,7 @@ export class PopupHandler {
 
   async #handleCreateRowEventAsync(rowNode) {
     const allowedChars = ['U', 'R', 'D', 'L'];
-    
+
     const gestureInput = rowNode.querySelector('.gesture-input');
     const gestureValue = gestureInput.value.trim().toUpperCase();
     const operationValue = rowNode.querySelector('#operation-select').value;
@@ -183,11 +183,11 @@ export class PopupHandler {
 
     for (let index = 0; index < gestureValue.length; index++) {
       const char = gestureValue[index];
-      
+
       if (allowedChars.indexOf(char) === -1) {
         this.#showValidationError(
-          `Char '${char}' is not allowed. You can only used the following chars: '${allowedChars.join('\', \'')}'.`,
-          gestureInput
+          `Char '${char}' is not allowed. You can only used the following chars: '${allowedChars.join("', '")}'.`,
+          gestureInput,
         );
 
         return;
@@ -223,10 +223,7 @@ export class PopupHandler {
     for (const gesture in allGestures) {
       if (Object.hasOwnProperty.call(allGestures, gesture)) {
         const eventValue = allGestures[gesture];
-        this.#createRow(
-          this.#gesturesSerializer.serialize(gesture),
-          this.#getOperationLabel(eventValue)
-        );
+        this.#createRow(this.#gesturesSerializer.serialize(gesture), this.#getOperationLabel(eventValue));
       }
     }
   }

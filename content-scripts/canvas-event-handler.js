@@ -35,12 +35,12 @@ class CanvasEventHandler {
     this.#position = {
       prev: {
         x: -1,
-        y: -1
+        y: -1,
       },
       curr: {
         x: -1,
-        y: -1
-      }
+        y: -1,
+      },
     };
   }
 

@@ -23,20 +23,13 @@
         "content-scripts/content-event-handler.js",
         "content.js"
       ],
-      "matches": [
-        "<all_urls>"
-      ],
+      "matches": ["<all_urls>"],
       "run_at": "document_start",
       "all_frames": true
     }
   ],
-  "permissions": [
-    "scripting",
-    "storage"
-  ],
-  "host_permissions": [
-    "<all_urls>"
-  ],
+  "permissions": ["scripting", "storage"],
+  "host_permissions": ["<all_urls>"],
   "action": {
     "default_popup": "popup/popup.html"
   },

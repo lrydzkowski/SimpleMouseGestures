@@ -16,49 +16,49 @@ export class OperationResolver {
   static operations = {
     goBack: {
       operation: new GoBackOperation(),
-      label: 'Go Back'
+      label: 'Go Back',
     },
     goForward: {
       operation: new GoForwardOperation(),
-      label: 'Go Forward'
+      label: 'Go Forward',
     },
     openNewTab: {
       operation: new OpenNewTabOperation(),
-      label: 'Open New Tab'
+      label: 'Open New Tab',
     },
     closeCurrentTab: {
       operation: new CloseCurrentTabOperation(),
-      label: 'Close Current Tab'
+      label: 'Close Current Tab',
     },
     reloadCurrentTab: {
       operation: new ReloadCurrentTabOperation(),
-      label: 'Reload Current Tab'
+      label: 'Reload Current Tab',
     },
     switchToLeftTab: {
       operation: new SwitchToLeftTabOperation(),
-      label: 'Switch to Left Tab'
+      label: 'Switch to Left Tab',
     },
     switchToRightTab: {
       operation: new SwitchToRightTabOperation(),
-      label: 'Switch to Right Tab'
+      label: 'Switch to Right Tab',
     },
     closeWindow: {
       operation: new CloseWindowOperation(),
-      label: 'Close Window'
+      label: 'Close Window',
     },
     minimizeWindow: {
       operation: new MinimizeWindowOperation(),
-      label: 'Minimize Window'
+      label: 'Minimize Window',
     },
     scrollToTop: {
       operation: new ScrollToTopOperation(),
-      label: 'Scroll to Top'
+      label: 'Scroll to Top',
     },
     scrollToBottom: {
       operation: new ScrollToBottomOperation(),
-      label: 'Scroll to Bottom'
-    }   
-  }
+      label: 'Scroll to Bottom',
+    },
+  };
 
   constructor(storage) {
     this.#storage = storage;

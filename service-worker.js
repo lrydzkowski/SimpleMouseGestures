@@ -5,15 +5,13 @@ const storage = new Storage();
 storage.initAsync();
 const operationResolver = new OperationResolver(storage);
 
-chrome.runtime.onMessage.addListener(
-  async function (message, sender, sendResponse) {
-    switch (message.type) {
-      case 'gestures':
-        await operationResolver.resolveAsync(message.gestures);
-        break;
-      case 'updateStorage':
-        await storage.initAsync();
-        break;
-    }
+chrome.runtime.onMessage.addListener(async function (message, sender, sendResponse) {
+  switch (message.type) {
+    case 'gestures':
+      await operationResolver.resolveAsync(message.gestures);
+      break;
+    case 'updateStorage':
+      await storage.initAsync();
+      break;
   }
-);
+});

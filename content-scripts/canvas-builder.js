@@ -12,8 +12,7 @@ class CanvasBuilder {
   #createCanvas() {
     const canvas = document.createElement('canvas');
     canvas.style.position = 'fixed';
-    canvas.style.top = '0',
-    canvas.style.left = '0';
+    (canvas.style.top = '0'), (canvas.style.left = '0');
     canvas.style.background = 'transparent';
     canvas.style.zIndex = '2147483647';
 
