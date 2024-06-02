@@ -10,6 +10,7 @@ import { MinimizeWindowOperation } from '/service-worker-scripts/operations/mini
 import { ScrollToTopOperation } from '/service-worker-scripts/operations/scroll-to-top-operation.js';
 import { ScrollToBottomOperation } from '/service-worker-scripts/operations/scroll-to-bottom-operation.js';
 import { ReopenTabOperation } from '/service-worker-scripts/operations/reopen-tab-operation.js';
+import { DuplicateTabOperation } from '/service-worker-scripts/operations/duplicate-tab-operation.js';
 
 export class OperationResolver {
   #storage;
@@ -62,6 +63,10 @@ export class OperationResolver {
     reopenTab: {
       operation: new ReopenTabOperation(),
       label: 'Reopen Tab',
+    },
+    duplicateTab: {
+      operation: new DuplicateTabOperation(),
+      label: 'Duplicate Tab',
     },
   };
 
