@@ -1,5 +1,6 @@
 * {
-  font-family: Open Sans,
+  font-family:
+    Open Sans,
     -apple-system,
     BlinkMacSystemFont,
     Segoe UI,
@@ -17,7 +18,7 @@ button {
   width: 60px;
 }
 button:hover {
-  background-color: #E6E6E6;
+  background-color: #e6e6e6;
 }
 input {
   border: 1px solid #000000;
@@ -56,7 +57,7 @@ select {
   z-index: 10;
 }
 .headers .header:hover:not(.active) {
-  background-color: #E6E6E6;
+  background-color: #e6e6e6;
 }
 
 .separator {
@@ -91,32 +92,32 @@ select {
   width: 500px;
 }
 
-.tab[data-name="gestures"] .list-content {
+.tab[data-name='gestures'] .list-content {
   overflow: auto;
   max-height: 451px;
 }
-.tab[data-name="gestures"] .row .delete-button {
+.tab[data-name='gestures'] .row .delete-button {
   cursor: pointer;
 }
-.tab[data-name="gestures"] .row .gesture-input {
+.tab[data-name='gestures'] .row .gesture-input {
   width: 45px;
 }
-.tab[data-name="gestures"] .row label:first-of-type,
-.tab[data-name="gestures"] .row p:first-of-type {
+.tab[data-name='gestures'] .row label:first-of-type,
+.tab[data-name='gestures'] .row p:first-of-type {
   display: inline-block;
   min-width: 120px;
 }
 
-.tab[data-name="settings"] .row label span {
+.tab[data-name='settings'] .row label span {
   display: inline-block;
   width: 70px;
 }
-.tab[data-name="settings"] .row #line-color {
+.tab[data-name='settings'] .row #line-color {
   width: 90px;
 }
-.tab[data-name="settings"] .row #line-width {
+.tab[data-name='settings'] .row #line-width {
   width: 90px;
 }
-.tab[data-name="settings"] .row:last-of-type {
+.tab[data-name='settings'] .row:last-of-type {
   margin-bottom: 15px;
 }

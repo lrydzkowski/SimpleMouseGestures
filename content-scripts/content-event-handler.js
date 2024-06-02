@@ -7,7 +7,7 @@ class ContentEventHandler {
   #contextMenuHandler;
 
   #blockDefaultContextMenu = false;
-  
+
   constructor(gesturesHandler, canvasHandler) {
     this.#gesturesHandler = gesturesHandler;
     this.#canvasHandler = canvasHandler;
@@ -26,7 +26,7 @@ class ContentEventHandler {
   #createMouseDownHandler() {
     return (event) => {
       this.#handleMouseDown(event, this.#gesturesHandler);
-    }
+    };
   }
 
   #handleMouseDown(event, gesturesHandler) {
@@ -40,7 +40,7 @@ class ContentEventHandler {
   #createMouseUpHandler() {
     return (event) => {
       this.#handleMouseUp(event, this.#canvasHandler, this.#gesturesHandler);
-    }
+    };
   }
 
   #handleMouseUp(event, canvasHandler, gesturesHandler) {
@@ -61,13 +61,16 @@ class ContentEventHandler {
     }
 
     this.#blockDefaultContextMenu = true;
-    chrome.runtime.sendMessage({ gestures, type: Consts.messageTypes.gestures });
+    chrome.runtime.sendMessage({
+      gestures,
+      type: Consts.messageTypes.gestures,
+    });
   }
 
   #createContextMenuHandler() {
     return (event) => {
       this.#handleContextMenu(event);
-    }
+    };
   }
 
   #handleContextMenu(event) {

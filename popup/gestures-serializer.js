@@ -1,6 +1,10 @@
 export class GesturesSerializer {
   serialize(gestures) {
-    return gestures.split('|').map(gesture => gesture[0]).join('').toUpperCase();
+    return gestures
+      .split('|')
+      .map((gesture) => gesture[0])
+      .join('')
+      .toUpperCase();
   }
 
   deserialize(serializedGestures) {

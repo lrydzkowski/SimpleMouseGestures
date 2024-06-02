@@ -1,68 +1,66 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Simple Mouse Gestures</title>
+    <link rel="stylesheet" href="./popup.css" />
+    <link rel="stylesheet" href="./dependencies/coloris.min.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Simple Mouse Gestures</title>
-  <link rel="stylesheet" href="./popup.css" />
-  <link rel="stylesheet" href="./dependencies/coloris.min.css" />
-</head>
-
-<body>
-  <div class="content">
-    <div class="headers">
-      <div class="header active" data-name="gestures">Gestures</div>
-      <div class="header" data-name="settings">Settings</div>
-    </div>
-    <div class="separator"></div>
-    <div class="tab active" data-name="gestures">
-      <div class="tab-content">
-        <div class="row add-row">
-          <button class="add-button">Add</button>
-          <label>Gesture: <input class="gesture-input" type="text" value="" /></label>
-          <label>
-            Operation:
-            <select id="operation-select"></select>
-          </label>
+  <body>
+    <div class="content">
+      <div class="headers">
+        <div class="header active" data-name="gestures">Gestures</div>
+        <div class="header" data-name="settings">Settings</div>
+      </div>
+      <div class="separator"></div>
+      <div class="tab active" data-name="gestures">
+        <div class="tab-content">
+          <div class="row add-row">
+            <button class="add-button">Add</button>
+            <label>Gesture: <input class="gesture-input" type="text" value="" /></label>
+            <label>
+              Operation:
+              <select id="operation-select"></select>
+            </label>
+          </div>
+          <div class="list-content"></div>
         </div>
-        <div class="list-content"></div>
+      </div>
+      <div class="tab" data-name="settings">
+        <div class="tab-content">
+          <div class="row">
+            <label>
+              <span>Line color:</span>
+              <input id="line-color" type="text" value="#000000" data-coloris />
+            </label>
+          </div>
+          <div class="row">
+            <label>
+              <span>Line width:</span>
+              <select id="line-width">
+                <option value="1">1px</option>
+                <option value="2">2px</option>
+                <option value="3">3px</option>
+                <option value="4">4px</option>
+                <option value="5">5px</option>
+                <option value="6">6px</option>
+                <option value="7">7px</option>
+                <option value="8">8px</option>
+                <option value="9">9px</option>
+                <option value="10">10px</option>
+              </select>
+            </label>
+          </div>
+          <button id="save-settings-button">Save</button>
+        </div>
       </div>
     </div>
-    <div class="tab" data-name="settings">
-      <div class="tab-content">
-        <div class="row">
-          <label>
-            <span>Line color:</span>
-            <input id="line-color" type="text" value="#000000" data-coloris>
-          </label>
-        </div>
-        <div class="row">
-          <label>
-            <span>Line width:</span>
-            <select id="line-width">
-              <option value="1">1px</option>
-              <option value="2">2px</option>
-              <option value="3">3px</option>
-              <option value="4">4px</option>
-              <option value="5">5px</option>
-              <option value="6">6px</option>
-              <option value="7">7px</option>
-              <option value="8">8px</option>
-              <option value="9">9px</option>
-              <option value="10">10px</option>
-            </select>
-          </label>
-        </div>
-        <button id="save-settings-button">Save</button>
-      </div>
-    </div>
-  </div>
 
-  <script src="../consts.js"></script>
-  <script src="./popup.js" type="module"></script>
-  <script src="./dependencies/coloris.min.js"></script>
-</body>
-
+    <script src="../consts.js"></script>
+    <script src="./popup.js" type="module"></script>
+    <script src="./dependencies/coloris.min.js"></script>
+  </body>
 </html>

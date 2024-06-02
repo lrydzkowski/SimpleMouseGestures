@@ -5,7 +5,7 @@ export class OpenNewTabOperation {
       return;
     }
 
-    const activeTabIndex = tabs.findIndex(tab => tab.active === true);
+    const activeTabIndex = tabs.findIndex((tab) => tab.active === true);
     if (activeTabIndex === -1) {
       return;
     }

@@ -9,7 +9,7 @@ export class SwitchToLeftTabOperation {
       return;
     }
 
-    const activeTabIndex = tabs.findIndex(tab => tab.active === true);
+    const activeTabIndex = tabs.findIndex((tab) => tab.active === true);
     if (activeTabIndex === -1) {
       return;
     }
@@ -17,6 +17,6 @@ export class SwitchToLeftTabOperation {
     const prevTabIndex = activeTabIndex === 0 ? tabs.length - 1 : activeTabIndex - 1;
     const prevTab = tabs[prevTabIndex];
 
-    chrome.tabs.update(prevTab.id, {active: true, highlighted: true});
+    chrome.tabs.update(prevTab.id, { active: true, highlighted: true });
   }
 }

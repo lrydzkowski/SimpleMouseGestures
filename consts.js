@@ -10,10 +10,10 @@ class Consts {
     up: 'up',
     right: 'right',
     down: 'down',
-    left: 'left'
+    left: 'left',
   };
   static messageTypes = {
     gestures: 'gestures',
-    updateStorage: 'updateStorage'
+    updateStorage: 'updateStorage',
   };
 }
