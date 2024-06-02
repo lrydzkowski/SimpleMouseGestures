@@ -9,6 +9,7 @@ import { CloseWindowOperation } from '/service-worker-scripts/operations/close-w
 import { MinimizeWindowOperation } from '/service-worker-scripts/operations/minimize-window-operation.js';
 import { ScrollToTopOperation } from '/service-worker-scripts/operations/scroll-to-top-operation.js';
 import { ScrollToBottomOperation } from '/service-worker-scripts/operations/scroll-to-bottom-operation.js';
+import { ReopenTabOperation } from '/service-worker-scripts/operations/reopen-tab-operation.js';
 
 export class OperationResolver {
   #storage;
@@ -57,6 +58,10 @@ export class OperationResolver {
     scrollToBottom: {
       operation: new ScrollToBottomOperation(),
       label: 'Scroll to Bottom',
+    },
+    reopenTab: {
+      operation: new ReopenTabOperation(),
+      label: 'Reopen Tab',
     },
   };
 
