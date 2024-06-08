@@ -11,6 +11,7 @@ import { ScrollToTopOperation } from '/service-worker-scripts/operations/scroll-
 import { ScrollToBottomOperation } from '/service-worker-scripts/operations/scroll-to-bottom-operation.js';
 import { ReopenTabOperation } from '/service-worker-scripts/operations/reopen-tab-operation.js';
 import { DuplicateTabOperation } from '/service-worker-scripts/operations/duplicate-tab-operation.js';
+import { OpenNewWindowOperation } from '/service-worker-scripts/operations/open-new-window-operation.js';
 
 export class OperationResolver {
   #storage;
@@ -67,6 +68,10 @@ export class OperationResolver {
     duplicateTab: {
       operation: new DuplicateTabOperation(),
       label: 'Duplicate Tab',
+    },
+    openNewWindow: {
+      operation: new OpenNewWindowOperation(),
+      label: 'Open New Window',
     },
   };
 
