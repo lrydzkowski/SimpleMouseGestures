@@ -21,6 +21,7 @@ The list of actions possible to attach to mouse gestures:
 - Scroll to Bottom
 - Reopen Tab
 - Duplicate Tab
+- Open New Window
 
 Other settings:
 
