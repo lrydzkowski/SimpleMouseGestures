@@ -12,6 +12,8 @@ import { ScrollToBottomOperation } from '/service-worker-scripts/operations/scro
 import { ReopenTabOperation } from '/service-worker-scripts/operations/reopen-tab-operation.js';
 import { DuplicateTabOperation } from '/service-worker-scripts/operations/duplicate-tab-operation.js';
 import { OpenNewWindowOperation } from '/service-worker-scripts/operations/open-new-window-operation.js';
+import { SearchHighlightedTextOperation } from '/service-worker-scripts/operations/search-highlighted-text-operation.js';
+import { CloseTabsToRightOperation } from '/service-worker-scripts/operations/close-tabs-to-right-operation.js';
 
 export class OperationResolver {
   #storage;
@@ -73,14 +75,26 @@ export class OperationResolver {
       operation: new OpenNewWindowOperation(),
       label: 'Open New Window',
     },
+    searchHighlightedTextInActiveTab: {
+      operation: new SearchHighlightedTextOperation(true),
+      label: 'Search Highlighted Text in Active Tab',
+    },
+    searchHighlightedTextInInactiveTab: {
+      operation: new SearchHighlightedTextOperation(false),
+      label: 'Search Highlighted Text in Inactive Tab',
+    },
+    closeTabsToRight: {
+      operation: new CloseTabsToRightOperation(),
+      label: 'Close Tabs to the Right',
+    }
   };
 
   constructor(storage) {
     this.#storage = storage;
   }
 
-  async resolveAsync(gestures) {
-    const serializedGestures = this.#serializeGestures(gestures);
+  async resolveAsync(context) {
+    const serializedGestures = this.#serializeGestures(context.gestures);
 
     const operationKey = this.#storage.getOperationKey(serializedGestures);
     if (operationKey === undefined) {
@@ -92,7 +106,7 @@ export class OperationResolver {
     }
 
     const element = OperationResolver.operations[operationKey];
-    await element.operation.doAsync();
+    await element.operation.doAsync(context);
   }
 
   #serializeGestures(gestures) {

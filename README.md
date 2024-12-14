@@ -22,11 +22,15 @@ The list of actions possible to attach to mouse gestures:
 - Reopen Tab
 - Duplicate Tab
 - Open New Window
+- Search Highlighted Text
+- Close Tabs to the Right
 
 Other settings:
 
 - Line color
 - Line width
+
+It works only in Windows operating system.
 
 ## Dependencies
 
