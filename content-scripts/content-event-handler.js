@@ -1,6 +1,7 @@
 class ContentEventHandler {
   #gesturesHandler;
   #canvasHandler;
+  #selectedTextHandler;
 
   #mouseDownHandler;
   #mouseUpHandler;
@@ -8,9 +9,10 @@ class ContentEventHandler {
 
   #blockDefaultContextMenu = false;
 
-  constructor(gesturesHandler, canvasHandler) {
+  constructor(gesturesHandler, canvasHandler, selectedTextHandler) {
     this.#gesturesHandler = gesturesHandler;
     this.#canvasHandler = canvasHandler;
+    this.#selectedTextHandler = selectedTextHandler;
     this.#mouseDownHandler = this.#createMouseDownHandler();
     this.#mouseUpHandler = this.#createMouseUpHandler();
     this.#contextMenuHandler = this.#createContextMenuHandler();
@@ -25,25 +27,26 @@ class ContentEventHandler {
 
   #createMouseDownHandler() {
     return (event) => {
-      this.#handleMouseDown(event, this.#gesturesHandler);
+      this.#handleMouseDown(event, this.#gesturesHandler, this.#selectedTextHandler);
     };
   }
 
-  #handleMouseDown(event, gesturesHandler) {
+  #handleMouseDown(event, gesturesHandler, selectedTextHandler) {
     if (event.button !== Consts.rightButton) {
       return;
     }
 
+    selectedTextHandler.saveSelectedText();
     gesturesHandler.initPosition(event);
   }
 
   #createMouseUpHandler() {
     return (event) => {
-      this.#handleMouseUp(event, this.#canvasHandler, this.#gesturesHandler);
+      this.#handleMouseUp(event, this.#canvasHandler, this.#gesturesHandler, this.#selectedTextHandler);
     };
   }
 
-  #handleMouseUp(event, canvasHandler, gesturesHandler) {
+  #handleMouseUp(event, canvasHandler, gesturesHandler, selectedTextHandler) {
     if (event.button !== Consts.rightButton) {
       return;
     }
@@ -64,6 +67,7 @@ class ContentEventHandler {
     chrome.runtime.sendMessage({
       gestures,
       type: Consts.messageTypes.gestures,
+      selectedText: selectedTextHandler.getSelectedText(),
     });
   }
 

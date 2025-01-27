@@ -1,13 +1,5 @@
 * {
-  font-family:
-    Open Sans,
-    -apple-system,
-    BlinkMacSystemFont,
-    Segoe UI,
-    Roboto,
-    Helvetica Neue,
-    Arial,
-    sans-serif;
+  font-family: Open Sans, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
   font-size: 13px;
 }
 button {
@@ -71,6 +63,9 @@ select {
 .tab {
   display: none;
   min-height: 300px;
+}
+.tab #operation-select {
+  width: 220px;
 }
 .tab.active {
   display: block;
