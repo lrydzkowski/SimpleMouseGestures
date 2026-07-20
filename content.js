@@ -6,5 +6,6 @@ const canvasEventHandler = new CanvasEventHandler(canvas, storage);
 canvasEventHandler.registerEvent();
 const canvasHandler = new CanvasHandler(canvasEventHandler, canvas);
 const selectedTextHandler = new SelectedTextHandler();
-const contentEventHandler = new ContentEventHandler(gesturesHandler, canvasHandler, selectedTextHandler);
+const linkHandler = new LinkHandler();
+const contentEventHandler = new ContentEventHandler(gesturesHandler, canvasHandler, selectedTextHandler, linkHandler);
 contentEventHandler.registerEvents();

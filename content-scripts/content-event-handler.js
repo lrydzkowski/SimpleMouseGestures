@@ -2,6 +2,7 @@ class ContentEventHandler {
   #gesturesHandler;
   #canvasHandler;
   #selectedTextHandler;
+  #linkHandler;
 
   #mouseDownHandler;
   #mouseUpHandler;
@@ -9,10 +10,11 @@ class ContentEventHandler {
 
   #blockDefaultContextMenu = false;
 
-  constructor(gesturesHandler, canvasHandler, selectedTextHandler) {
+  constructor(gesturesHandler, canvasHandler, selectedTextHandler, linkHandler) {
     this.#gesturesHandler = gesturesHandler;
     this.#canvasHandler = canvasHandler;
     this.#selectedTextHandler = selectedTextHandler;
+    this.#linkHandler = linkHandler;
     this.#mouseDownHandler = this.#createMouseDownHandler();
     this.#mouseUpHandler = this.#createMouseUpHandler();
     this.#contextMenuHandler = this.#createContextMenuHandler();
@@ -27,26 +29,33 @@ class ContentEventHandler {
 
   #createMouseDownHandler() {
     return (event) => {
-      this.#handleMouseDown(event, this.#gesturesHandler, this.#selectedTextHandler);
+      this.#handleMouseDown(event, this.#gesturesHandler, this.#selectedTextHandler, this.#linkHandler);
     };
   }
 
-  #handleMouseDown(event, gesturesHandler, selectedTextHandler) {
+  #handleMouseDown(event, gesturesHandler, selectedTextHandler, linkHandler) {
     if (event.button !== Consts.rightButton) {
       return;
     }
 
     selectedTextHandler.saveSelectedText();
+    linkHandler.saveLink(event);
     gesturesHandler.initPosition(event);
   }
 
   #createMouseUpHandler() {
     return (event) => {
-      this.#handleMouseUp(event, this.#canvasHandler, this.#gesturesHandler, this.#selectedTextHandler);
+      this.#handleMouseUp(
+        event,
+        this.#canvasHandler,
+        this.#gesturesHandler,
+        this.#selectedTextHandler,
+        this.#linkHandler,
+      );
     };
   }
 
-  #handleMouseUp(event, canvasHandler, gesturesHandler, selectedTextHandler) {
+  #handleMouseUp(event, canvasHandler, gesturesHandler, selectedTextHandler, linkHandler) {
     if (event.button !== Consts.rightButton) {
       return;
     }
@@ -68,6 +77,7 @@ class ContentEventHandler {
       gestures,
       type: Consts.messageTypes.gestures,
       selectedText: selectedTextHandler.getSelectedText(),
+      linkUrl: linkHandler.getLink(),
     });
   }
 

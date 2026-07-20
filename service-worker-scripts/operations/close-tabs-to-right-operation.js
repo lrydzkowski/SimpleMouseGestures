@@ -6,7 +6,7 @@ export class CloseTabsToRightOperation {
     }
 
     const allTabs = await chrome.tabs.query({ currentWindow: true });
-    const tabsToClose = allTabs.filter(tab => tab.index > currentTab.index).map(tab => tab.id);
+    const tabsToClose = allTabs.filter((tab) => tab.index > currentTab.index).map((tab) => tab.id);
 
     if (tabsToClose.length > 0) {
       chrome.tabs.remove(tabsToClose);

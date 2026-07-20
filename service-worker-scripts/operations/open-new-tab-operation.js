@@ -1,5 +1,11 @@
 export class OpenNewTabOperation {
-  async doAsync() {
+  #openLink = false;
+
+  constructor(openLink) {
+    this.#openLink = openLink ?? false;
+  }
+
+  async doAsync(context) {
     const tabs = await chrome.tabs.query({ currentWindow: true });
     if (!Array.isArray(tabs)) {
       return;
@@ -10,6 +16,20 @@ export class OpenNewTabOperation {
       return;
     }
 
-    chrome.tabs.create({ active: true, index: activeTabIndex + 1 });
+    const createProperties = { active: true, index: activeTabIndex + 1 };
+    const linkUrl = this.#getLinkUrl(context);
+    if (linkUrl.length > 0) {
+      createProperties.url = linkUrl;
+    }
+
+    chrome.tabs.create(createProperties);
+  }
+
+  #getLinkUrl(context) {
+    if (!this.#openLink) {
+      return '';
+    }
+
+    return context?.linkUrl?.trim() ?? '';
   }
 }

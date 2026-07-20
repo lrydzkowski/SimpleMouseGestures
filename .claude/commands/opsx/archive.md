@@ -1,5 +1,5 @@
 ---
-name: "OPSX: Archive"
+name: 'OPSX: Archive'
 description: Archive a completed change in the experimental workflow
 allowed-tools: Bash(openspec:*)
 category: Workflow
@@ -8,9 +8,14 @@ tags: [workflow, archive, experimental]
 
 Archive a completed change in the experimental workflow.
 
-**Store selection:** If the user names a store (a store is a standalone OpenSpec repo registered on this machine) or the work lives in one, run `openspec store list --json` to discover registered store ids, then pass `--store <id>` on the commands that read or write specs and changes (`new change`, `status`, `instructions`, `list`, `show`, `validate`, `archive`, `doctor`, `context`). Other commands do not take the flag. Hints printed by commands already carry the flag; keep it on follow-ups. Without a store, commands act on the nearest local `openspec/` root.
+**Store selection:** If the user names a store (a store is a standalone OpenSpec repo registered on this machine) or the
+work lives in one, run `openspec store list --json` to discover registered store ids, then pass `--store <id>` on the
+commands that read or write specs and changes (`new change`, `status`, `instructions`, `list`, `show`, `validate`,
+`archive`, `doctor`, `context`). Other commands do not take the flag. Hints printed by commands already carry the flag;
+keep it on follow-ups. Without a store, commands act on the nearest local `openspec/` root.
 
-**Input**: Optionally specify a change name after `/opsx:archive` (e.g., `/opsx:archive add-auth`). If omitted, check if it can be inferred from conversation context. If vague or ambiguous you MUST prompt for available changes.
+**Input**: Optionally specify a change name after `/opsx:archive` (e.g., `/opsx:archive add-auth`). If omitted, check if
+it can be inferred from conversation context. If vague or ambiguous you MUST prompt for available changes.
 
 **Steps**
 
@@ -18,8 +23,7 @@ Archive a completed change in the experimental workflow.
 
    Run `openspec list --json` to get available changes. Use the **AskUserQuestion tool** to let the user select.
 
-   Show only active changes (not already archived).
-   Include the schema used for each change if available.
+   Show only active changes (not already archived). Include the schema used for each change if available.
 
    **IMPORTANT**: Do NOT guess or auto-select a change. Always let the user choose.
 
@@ -52,7 +56,8 @@ Archive a completed change in the experimental workflow.
 
 4. **Assess delta spec sync state**
 
-   Use `artifactPaths.specs.existingOutputPaths` from status JSON to check for delta specs. If none exist, proceed without sync prompt.
+   Use `artifactPaths.specs.existingOutputPaths` from status JSON to check for delta specs. If none exist, proceed
+   without sync prompt.
 
    **If delta specs exist:**
    - Compare each delta spec with its corresponding main spec at `openspec/specs/<capability>/spec.md`
@@ -63,11 +68,14 @@ Archive a completed change in the experimental workflow.
    - If changes needed: "Sync now (recommended)", "Archive without syncing"
    - If already synced: "Archive now", "Sync anyway", "Cancel"
 
-   If user chooses sync, use Task tool (subagent_type: "general-purpose", prompt: "Use Skill tool to invoke openspec-sync-specs for change '<name>'. Delta spec analysis: <include the analyzed delta spec summary>"). Proceed to archive regardless of choice.
+   If user chooses sync, use Task tool (subagent_type: "general-purpose", prompt: "Use Skill tool to invoke
+   openspec-sync-specs for change '<name>'. Delta spec analysis: <include the analyzed delta spec summary>"). Proceed to
+   archive regardless of choice.
 
 5. **Perform the archive**
 
    Create an `archive` directory under `planningHome.changesDir` if it doesn't exist:
+
    ```bash
    mkdir -p "<planningHome.changesDir>/archive"
    ```
@@ -152,6 +160,7 @@ Target archive directory already exists.
 ```
 
 **Guardrails**
+
 - Always prompt for change selection if not provided
 - Use artifact graph (openspec status --json) for completion checking
 - Don't block archive on warnings - just inform and confirm

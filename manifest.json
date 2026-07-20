@@ -20,6 +20,7 @@
         "content-scripts/canvas-event-handler.js",
         "content-scripts/canvas-handler.js",
         "content-scripts/selected-text-handler.js",
+        "content-scripts/link-handler.js",
         "content-scripts/settings-storage.js",
         "content-scripts/content-event-handler.js",
         "content.js"

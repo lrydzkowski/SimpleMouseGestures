@@ -11,6 +11,7 @@ The list of actions possible to attach to mouse gestures:
 - Go Back
 - Go Forward
 - Open New Tab
+- Open Link in New Tab (opens the link under the cursor at gesture start; falls back to a blank new tab)
 - Close Current Tab
 - Reload Current Tab
 - Switch to Left Tab
