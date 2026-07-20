@@ -7,5 +7,12 @@ canvasEventHandler.registerEvent();
 const canvasHandler = new CanvasHandler(canvasEventHandler, canvas);
 const selectedTextHandler = new SelectedTextHandler();
 const linkHandler = new LinkHandler();
-const contentEventHandler = new ContentEventHandler(gesturesHandler, canvasHandler, selectedTextHandler, linkHandler);
+const platformDetector = new PlatformDetector();
+const contentEventHandler = new ContentEventHandler(
+  gesturesHandler,
+  canvasHandler,
+  selectedTextHandler,
+  linkHandler,
+  platformDetector.isContextMenuOnPress(),
+);
 contentEventHandler.registerEvents();

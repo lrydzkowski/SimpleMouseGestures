@@ -28,6 +28,11 @@ class GesturesHandler {
     return this.#gestures;
   }
 
+  cancel() {
+    this.#unregisterEvent();
+    this.#reset();
+  }
+
   #registerEvent() {
     addEventListener('mousemove', this.#mousemoveHandler);
   }

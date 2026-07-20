@@ -35,7 +35,13 @@ In the Backup tab you can export all your settings (gesture mappings, line color
 them back later. Importing replaces all current settings after confirmation, which makes it easy to restore a backup or
 move your configuration to another machine.
 
-It works only in Windows operating system.
+It works on Windows, Linux, and macOS.
+
+On Linux and macOS the browser normally opens the context menu the moment the right mouse button is pressed, which would
+make drawing gestures impossible. The extension therefore keeps the context menu closed while the right button is used
+for gestures. To open the context menu on these systems, right click twice in quick succession (the second click within
+half a second) without moving the mouse. On Windows nothing changes: a plain right click opens the context menu as
+usual.
 
 ## Dependencies
 

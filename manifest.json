@@ -22,6 +22,7 @@
         "content-scripts/selected-text-handler.js",
         "content-scripts/link-handler.js",
         "content-scripts/settings-storage.js",
+        "content-scripts/platform-detector.js",
         "content-scripts/content-event-handler.js",
         "content.js"
       ],
