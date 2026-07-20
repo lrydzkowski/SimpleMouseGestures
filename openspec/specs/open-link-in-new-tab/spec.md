@@ -2,8 +2,8 @@
 
 ## Purpose
 
-Allow a mouse gesture that starts on a hyperlink to capture that link's URL and open it in a new tab, while keeping
-the existing blank "Open New Tab" behavior unchanged.
+Allow a mouse gesture that starts on a hyperlink to capture that link's URL and open it in a new tab, while keeping the
+existing blank "Open New Tab" behavior unchanged.
 
 ## Requirements
 

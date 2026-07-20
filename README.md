@@ -31,6 +31,10 @@ Other settings:
 - Line color
 - Line width
 
+In the Backup tab you can export all your settings (gesture mappings, line color, line width) to a JSON file and import
+them back later. Importing replaces all current settings after confirmation, which makes it easy to restore a backup or
+move your configuration to another machine.
+
 It works only in Windows operating system.
 
 ## Dependencies

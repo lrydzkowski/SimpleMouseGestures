@@ -124,3 +124,7 @@ select {
 .tab[data-name='settings'] .row:last-of-type {
   margin-bottom: 15px;
 }
+
+.tab[data-name='backup'] #import-file-input {
+  display: none;
+}

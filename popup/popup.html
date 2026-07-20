@@ -14,6 +14,7 @@
       <div class="headers">
         <div class="header active" data-name="gestures">Gestures</div>
         <div class="header" data-name="settings">Settings</div>
+        <div class="header" data-name="backup">Backup</div>
       </div>
       <div class="separator"></div>
       <div class="tab active" data-name="gestures">
@@ -55,6 +56,15 @@
             </label>
           </div>
           <button id="save-settings-button">Save</button>
+        </div>
+      </div>
+      <div class="tab" data-name="backup">
+        <div class="tab-content">
+          <div class="row">
+            <button id="export-button">Export</button>
+            <button id="import-button">Import</button>
+            <input id="import-file-input" type="file" accept=".json,application/json" />
+          </div>
         </div>
       </div>
     </div>

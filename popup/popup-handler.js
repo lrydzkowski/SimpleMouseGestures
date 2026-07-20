@@ -3,10 +3,12 @@ import { OperationResolver } from '/service-worker-scripts/operation-resolver.js
 export class PopupHandler {
   #storage;
   #gesturesSerializer;
+  #backupHandler;
 
-  constructor(storage, gesturesSerializer) {
+  constructor(storage, gesturesSerializer, backupHandler) {
     this.#storage = storage;
     this.#gesturesSerializer = gesturesSerializer;
+    this.#backupHandler = backupHandler;
   }
 
   async initAsync() {
@@ -52,6 +54,9 @@ export class PopupHandler {
     this.#registerGestureInputEvent();
     this.#registerDeleteButtonsEvent();
     this.#registerSaveSettingsButtonEvent();
+    this.#registerExportButtonEvent();
+    this.#registerImportButtonEvent();
+    this.#registerImportFileInputEvent();
   }
 
   #registerTabEvent() {
@@ -125,6 +130,79 @@ export class PopupHandler {
       await this.#saveSettingsAsync(settings);
       this.#showMessage('Settings have been saved. You have to refresh the page to start using new settings.');
     });
+  }
+
+  #registerExportButtonEvent() {
+    const exportButton = document.querySelector('#export-button');
+    exportButton.addEventListener('mousedown', async (event) => {
+      if (event.button !== Consts.leftButton) {
+        return;
+      }
+
+      await this.#exportBackupAsync();
+    });
+  }
+
+  #registerImportButtonEvent() {
+    const importButton = document.querySelector('#import-button');
+    importButton.addEventListener('mousedown', (event) => {
+      if (event.button !== Consts.leftButton) {
+        return;
+      }
+
+      document.querySelector('#import-file-input').click();
+    });
+  }
+
+  #registerImportFileInputEvent() {
+    const importFileInput = document.querySelector('#import-file-input');
+    importFileInput.addEventListener('change', async (event) => {
+      await this.#importBackupAsync(event.target);
+    });
+  }
+
+  async #exportBackupAsync() {
+    const fileContent = await this.#backupHandler.buildExportFileContentAsync();
+    const url = URL.createObjectURL(new Blob([fileContent], { type: 'application/json' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'simple-mouse-gestures-backup.json';
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async #importBackupAsync(importFileInput) {
+    const file = importFileInput.files[0];
+    importFileInput.value = '';
+    if (file === undefined) {
+      return;
+    }
+
+    let backupData = null;
+    try {
+      backupData = this.#backupHandler.parseImportFileContent(await file.text());
+    } catch (e) {
+      this.#showMessage(e.message);
+
+      return;
+    }
+
+    const confirmed = confirm(
+      'All current gestures and settings will be replaced. You can use Export first to keep a copy. Continue?',
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    await this.#storage.replaceAllAsync(backupData.gestures, backupData.settings);
+    await this.#refreshAfterImportAsync();
+    this.#showMessage('Settings have been imported. You have to refresh the page to start using new settings.');
+  }
+
+  async #refreshAfterImportAsync() {
+    document.querySelector('.tab[data-name="gestures"] .list-content').replaceChildren();
+    await this.#restoreListAsync();
+    await this.#restoreSettingsAsync();
   }
 
   async #handleGestureInputEventAsync(event) {
