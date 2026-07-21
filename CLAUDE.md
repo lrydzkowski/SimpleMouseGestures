@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Simple Mouse Gestures is a Google Chrome extension (Manifest V3) written in vanilla JavaScript. Users draw gestures with
 the right mouse button held down; each gesture sequence (up/right/down/left) maps to a browser action (go back, close
-tab, etc.). Windows only.
+tab, etc.). Works on Windows, Linux, and macOS.
 
 ## Development
 
@@ -33,11 +33,17 @@ dependency order by the `content_scripts.js` array in `manifest.json` (new files
 `content.js`). Classes are globals. `content.js` is the composition root that wires everything.
 
 Flow: `ContentEventHandler` listens for right-button mousedown/mouseup. On mousedown, `SelectedTextHandler` snapshots
-the current selection and `GesturesHandler` starts recording mouse movement, converting movement angles into a sequence
-of `up`/`right`/`down`/`left` tokens (deduplicating consecutive repeats). While recording, a full-screen canvas overlay
+the current selection, `LinkHandler` snapshots the nearest http(s) link under the cursor, and `GesturesHandler` starts
+recording mouse movement, converting movement angles into a sequence of `up`/`right`/`down`/`left` tokens
+(deduplicating consecutive repeats). While recording, a full-screen canvas overlay
 (`CanvasBuilder`/`CanvasHandler`/`CanvasEventHandler`) draws the gesture trail using line settings read via
-`SettingsStorage`. On mouseup with a non-empty gesture, it sends a `gestures` message to the service worker and
-suppresses the next context menu.
+`SettingsStorage`. On mouseup with a non-empty gesture, it sends a `gestures` message (gestures, selected text, link
+URL) to the service worker and suppresses the next context menu.
+
+Context menu handling is platform-dependent (`PlatformDetector`): on Linux/macOS the native menu opens on right-button
+press, which would interrupt gestures, so `ContentEventHandler` suppresses it by default — a gesture-free right click
+arms a 500 ms window during which a second right click opens the native menu. On Windows the menu opens on release, so
+only the context menu following a completed gesture is suppressed.
 
 ### Service worker (`service-worker.js` + `service-worker-scripts/`)
 
@@ -45,8 +51,8 @@ ES modules (`"type": "module"` in the manifest). Handles two message types: `ges
 and `updateStorage` (re-read storage after the popup saves changes).
 
 `OperationResolver` serializes the gesture array to a pipe-joined key (`up|left`), looks it up in the stored
-gesture→operation map, and calls the matching operation's `doAsync(context)`. `Context` carries the gestures and any
-selected text.
+gesture→operation map, and calls the matching operation's `doAsync(context)`. `Context` carries the gestures, any
+selected text, and the link URL captured under the cursor at gesture start.
 
 To add a new operation: create a class in `service-worker-scripts/operations/` with an async `doAsync(context)` method
 (catch and log errors from Chrome APIs, as the existing operations do), then import and register it in the
@@ -55,10 +61,17 @@ populated from that map automatically. Update the action list in `README.md`.
 
 ### Popup (`popup/`)
 
-ES modules loaded from `popup.html`; `consts.js` is included as a plain script tag. The settings UI has two tabs:
-gesture→operation mappings and line color/width. It imports `OperationResolver` from `service-worker-scripts/` directly
-to enumerate available operations. `GesturesSerializer` converts between the UI letter form (`UL`) and the storage form
-(`up|left`). After saving, `popup/storage.js` sends `updateStorage` so the service worker reloads its cached state.
+ES modules loaded from `popup.html`; `consts.js` is included as a plain script tag. The UI has three tabs: Gestures
+(gesture→operation mappings, validated inline instead of via `alert()`), Settings (line color/width, auto-saved on
+change — there is no Save button), and Backup (export/import of all settings as a versioned JSON file; `BackupHandler`
+validates imported gestures, operation keys, and settings, then `Storage.replaceAllAsync` replaces everything after a
+modal confirmation). It imports `OperationResolver` from `service-worker-scripts/` directly to enumerate available
+operations. `GesturesSerializer` converts between the UI letter form (`UL`) and the storage form (`up|left`). After
+every save, `popup/storage.js` sends `updateStorage` so the service worker reloads its cached state.
+
+Styling mimics Chrome's design language through CSS custom properties (design tokens) defined in `popup.css`. The
+vendored Coloris picker is themed by overriding its public CSS classes from `popup.css` — never edit files in
+`popup/dependencies/`.
 
 ### Shared state and conventions
 
