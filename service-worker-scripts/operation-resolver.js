@@ -28,8 +28,12 @@ export class OperationResolver {
       label: 'Go Forward',
     },
     openNewTab: {
-      operation: new OpenNewTabOperation(),
+      operation: new OpenNewTabOperation(false),
       label: 'Open New Tab',
+    },
+    openLinkInNewTab: {
+      operation: new OpenNewTabOperation(true),
+      label: 'Open Link in New Tab',
     },
     closeCurrentTab: {
       operation: new CloseCurrentTabOperation(),
@@ -86,7 +90,7 @@ export class OperationResolver {
     closeTabsToRight: {
       operation: new CloseTabsToRightOperation(),
       label: 'Close Tabs to the Right',
-    }
+    },
   };
 
   constructor(storage) {

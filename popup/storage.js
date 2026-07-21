@@ -41,6 +41,14 @@ export class Storage {
     chrome.runtime.sendMessage({ type: 'updateStorage' });
   }
 
+  async replaceAllAsync(gestures, settings) {
+    const obj = {};
+    obj[this.#mapStorageKey] = JSON.stringify(gestures);
+    obj[this.#settingsStorageKey] = JSON.stringify(settings);
+    await chrome.storage.local.set(obj);
+    chrome.runtime.sendMessage({ type: 'updateStorage' });
+  }
+
   async #saveMapInStorageAsync(map) {
     await this.#saveInStorageAsync(this.#mapStorageKey, map);
     chrome.runtime.sendMessage({ type: 'updateStorage' });

@@ -9,7 +9,7 @@ const operationResolver = new OperationResolver(storage);
 chrome.runtime.onMessage.addListener(async function (message, sender, sendResponse) {
   switch (message.type) {
     case 'gestures':
-      const context = new Context(message.gestures, message.selectedText);
+      const context = new Context(message.gestures, message.selectedText, message.linkUrl);
       await operationResolver.resolveAsync(context);
       break;
     case 'updateStorage':
