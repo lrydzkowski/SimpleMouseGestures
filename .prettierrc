@@ -9,7 +9,7 @@
   "bracketSpacing": true,
   "bracketSameLine": true,
   "arrowParens": "always",
-  "endOfLine": "crlf",
+  "endOfLine": "lf",
   "requirePragma": false,
   "proseWrap": "always",
   "embeddedLanguageFormatting": "auto",
