@@ -23,13 +23,16 @@ The list of actions possible to attach to mouse gestures:
 - Reopen Tab
 - Duplicate Tab
 - Open New Window
-- Search Highlighted Text
+- Search Highlighted Text in Active Tab
+- Search Highlighted Text in Inactive Tab
 - Close Tabs to the Right
 
 Other settings:
 
 - Line color
 - Line width
+
+Settings are saved automatically as you change them and apply to pages loaded after the change.
 
 In the Backup tab you can export all your settings (gesture mappings, line color, line width) to a JSON file and import
 them back later. Importing replaces all current settings after confirmation, which makes it easy to restore a backup or
