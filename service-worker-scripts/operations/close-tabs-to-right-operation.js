@@ -9,7 +9,11 @@ export class CloseTabsToRightOperation {
     const tabsToClose = allTabs.filter((tab) => tab.index > currentTab.index).map((tab) => tab.id);
 
     if (tabsToClose.length > 0) {
-      chrome.tabs.remove(tabsToClose);
+      try {
+        await chrome.tabs.remove(tabsToClose);
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 }

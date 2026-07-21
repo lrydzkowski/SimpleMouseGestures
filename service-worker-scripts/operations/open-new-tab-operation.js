@@ -22,7 +22,11 @@ export class OpenNewTabOperation {
       createProperties.url = linkUrl;
     }
 
-    chrome.tabs.create(createProperties);
+    try {
+      await chrome.tabs.create(createProperties);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   #getLinkUrl(context) {
