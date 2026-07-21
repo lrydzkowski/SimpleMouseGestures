@@ -11,36 +11,36 @@
 
   <body>
     <div class="content">
-      <div class="headers">
-        <div class="header active" data-name="gestures">Gestures</div>
-        <div class="header" data-name="settings">Settings</div>
-        <div class="header" data-name="backup">Backup</div>
+      <div class="headers" role="tablist">
+        <button class="header active" role="tab" aria-selected="true" data-name="gestures">Gestures</button>
+        <button class="header" role="tab" aria-selected="false" data-name="settings">Settings</button>
+        <button class="header" role="tab" aria-selected="false" data-name="backup">Backup</button>
       </div>
-      <div class="separator"></div>
-      <div class="tab active" data-name="gestures">
+      <div class="tab active" role="tabpanel" data-name="gestures">
         <div class="tab-content">
           <div class="row add-row">
-            <button class="add-button">Add</button>
-            <label>Gesture: <input class="gesture-input" type="text" value="" /></label>
+            <label>Gesture <input class="gesture-input" type="text" value="" /></label>
             <label>
-              Operation:
+              Operation
               <select id="operation-select"></select>
             </label>
+            <button class="add-button button-filled">Add</button>
           </div>
+          <p class="field-error" aria-live="polite"></p>
           <div class="list-content"></div>
         </div>
       </div>
-      <div class="tab" data-name="settings">
+      <div class="tab" role="tabpanel" data-name="settings">
         <div class="tab-content">
           <div class="row">
             <label>
-              <span>Line color:</span>
+              <span>Line color</span>
               <input id="line-color" type="text" value="#000000" data-coloris />
             </label>
           </div>
           <div class="row">
             <label>
-              <span>Line width:</span>
+              <span>Line width</span>
               <select id="line-width">
                 <option value="1">1px</option>
                 <option value="2">2px</option>
@@ -55,19 +55,29 @@
               </select>
             </label>
           </div>
-          <button id="save-settings-button">Save</button>
+          <p class="caption">Changes are saved automatically and apply to pages loaded after the change.</p>
         </div>
       </div>
-      <div class="tab" data-name="backup">
+      <div class="tab" role="tabpanel" data-name="backup">
         <div class="tab-content">
           <div class="row">
-            <button id="export-button">Export</button>
-            <button id="import-button">Import</button>
+            <button id="export-button" class="button-outlined">Export</button>
+            <button id="import-button" class="button-outlined">Import</button>
             <input id="import-file-input" type="file" accept=".json,application/json" />
           </div>
+          <p id="backup-message" aria-live="polite"></p>
         </div>
       </div>
     </div>
+
+    <dialog id="import-dialog">
+      <h2>Replace all settings?</h2>
+      <p>All current gestures and settings will be replaced. You can use Export first to keep a copy.</p>
+      <form method="dialog" class="dialog-buttons">
+        <button value="cancel" class="button-text">Cancel</button>
+        <button value="replace" class="button-text">Replace</button>
+      </form>
+    </dialog>
 
     <script src="../consts.js"></script>
     <script src="./popup.js" type="module"></script>

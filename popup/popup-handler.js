@@ -53,7 +53,7 @@ export class PopupHandler {
     this.#registerAddButtonEvent();
     this.#registerGestureInputEvent();
     this.#registerDeleteButtonsEvent();
-    this.#registerSaveSettingsButtonEvent();
+    this.#registerSettingsAutoSaveEvents();
     this.#registerExportButtonEvent();
     this.#registerImportButtonEvent();
     this.#registerImportFileInputEvent();
@@ -62,32 +62,30 @@ export class PopupHandler {
   #registerTabEvent() {
     const headers = document.querySelectorAll('.header');
     for (const header of headers) {
-      header.addEventListener('mousedown', (event) => {
+      header.addEventListener('click', (event) => {
         const activeClass = 'active';
 
-        let currentlyActiveHeader = document.querySelector(`.header.${activeClass}`);
+        const currentlyActiveHeader = document.querySelector(`.header.${activeClass}`);
         currentlyActiveHeader.classList.remove(activeClass);
-        let currentlyActiveTab = document.querySelector(`.tab.${activeClass}`);
+        currentlyActiveHeader.setAttribute('aria-selected', 'false');
+        const currentlyActiveTab = document.querySelector(`.tab.${activeClass}`);
         currentlyActiveTab.classList.remove(activeClass);
 
-        let tabName = event.target.getAttribute('data-name');
-        let header = document.querySelector(`.header[data-name="${tabName}"]`);
-        header.classList.add(activeClass);
-        let tab = document.querySelector(`.tab[data-name="${tabName}"]`);
-        tab.classList.add(activeClass);
+        const tabName = event.currentTarget.getAttribute('data-name');
+        const newActiveHeader = document.querySelector(`.header[data-name="${tabName}"]`);
+        newActiveHeader.classList.add(activeClass);
+        newActiveHeader.setAttribute('aria-selected', 'true');
+        const newActiveTab = document.querySelector(`.tab[data-name="${tabName}"]`);
+        newActiveTab.classList.add(activeClass);
       });
     }
   }
 
   #registerAddButtonEvent() {
     const addButton = document.querySelector('.add-button');
-    addButton.addEventListener('mousedown', async (event) => {
-      if (event.button !== Consts.leftButton) {
-        return;
-      }
-
-      const parentNode = event.target.parentNode;
-      await this.#handleCreateRowEventAsync(parentNode);
+    addButton.addEventListener('click', async (event) => {
+      const addRow = event.currentTarget.closest('.add-row');
+      await this.#handleCreateRowEventAsync(addRow);
     });
   }
 
@@ -106,50 +104,35 @@ export class PopupHandler {
   }
 
   #registerDeleteButtonEvent(deleteButton) {
-    deleteButton.addEventListener('mousedown', async (event) => {
-      if (event.button !== Consts.leftButton) {
-        return;
-      }
-
-      const parentNode = event.target.parentNode;
-      await this.#handleDeleteRowEventAsync(parentNode);
+    deleteButton.addEventListener('click', async (event) => {
+      const rowNode = event.currentTarget.closest('.row');
+      await this.#handleDeleteRowEventAsync(rowNode);
     });
   }
 
-  #registerSaveSettingsButtonEvent() {
-    const saveSettingsButton = document.querySelector('#save-settings-button');
-    saveSettingsButton.addEventListener('mousedown', async (event) => {
-      if (event.button !== Consts.leftButton) {
-        return;
-      }
-
-      const settings = {
-        lineColor: document.querySelector('.tab[data-name="settings"] #line-color').value,
-        lineWidth: document.querySelector('.tab[data-name="settings"] #line-width').value,
-      };
-      await this.#saveSettingsAsync(settings);
-      this.#showMessage('Settings have been saved. You have to refresh the page to start using new settings.');
-    });
+  #registerSettingsAutoSaveEvents() {
+    const lineColorInput = document.querySelector('.tab[data-name="settings"] #line-color');
+    const lineWidthSelect = document.querySelector('.tab[data-name="settings"] #line-width');
+    const saveAsync = async () => {
+      await this.#saveSettingsAsync({
+        lineColor: lineColorInput.value,
+        lineWidth: lineWidthSelect.value,
+      });
+    };
+    lineColorInput.addEventListener('change', saveAsync);
+    lineWidthSelect.addEventListener('change', saveAsync);
   }
 
   #registerExportButtonEvent() {
     const exportButton = document.querySelector('#export-button');
-    exportButton.addEventListener('mousedown', async (event) => {
-      if (event.button !== Consts.leftButton) {
-        return;
-      }
-
+    exportButton.addEventListener('click', async () => {
       await this.#exportBackupAsync();
     });
   }
 
   #registerImportButtonEvent() {
     const importButton = document.querySelector('#import-button');
-    importButton.addEventListener('mousedown', (event) => {
-      if (event.button !== Consts.leftButton) {
-        return;
-      }
-
+    importButton.addEventListener('click', () => {
       document.querySelector('#import-file-input').click();
     });
   }
@@ -162,6 +145,7 @@ export class PopupHandler {
   }
 
   async #exportBackupAsync() {
+    this.#clearBackupMessage();
     const fileContent = await this.#backupHandler.buildExportFileContentAsync();
     const url = URL.createObjectURL(new Blob([fileContent], { type: 'application/json' }));
     const link = document.createElement('a');
@@ -178,25 +162,35 @@ export class PopupHandler {
       return;
     }
 
+    this.#clearBackupMessage();
+
     let backupData = null;
     try {
       backupData = this.#backupHandler.parseImportFileContent(await file.text());
     } catch (e) {
-      this.#showMessage(e.message);
+      this.#showBackupMessage(e.message, true);
 
       return;
     }
 
-    const confirmed = confirm(
-      'All current gestures and settings will be replaced. You can use Export first to keep a copy. Continue?',
-    );
+    const confirmed = await this.#confirmReplaceAsync();
     if (!confirmed) {
       return;
     }
 
     await this.#storage.replaceAllAsync(backupData.gestures, backupData.settings);
     await this.#refreshAfterImportAsync();
-    this.#showMessage('Settings have been imported. You have to refresh the page to start using new settings.');
+    this.#showBackupMessage('Settings have been imported. Reload already-open pages to start using them.', false);
+  }
+
+  #confirmReplaceAsync() {
+    const dialog = document.querySelector('#import-dialog');
+    dialog.returnValue = '';
+
+    return new Promise((resolve) => {
+      dialog.addEventListener('close', () => resolve(dialog.returnValue === 'replace'), { once: true });
+      dialog.showModal();
+    });
   }
 
   async #refreshAfterImportAsync() {
@@ -206,9 +200,11 @@ export class PopupHandler {
   }
 
   async #handleGestureInputEventAsync(event) {
+    this.#clearValidationError();
+
     if (event.key === Consts.enter) {
-      const parentNode = event.target.parentNode.parentNode;
-      await this.#handleCreateRowEventAsync(parentNode);
+      const addRow = event.target.closest('.add-row');
+      await this.#handleCreateRowEventAsync(addRow);
 
       return;
     }
@@ -285,6 +281,7 @@ export class PopupHandler {
       return;
     }
 
+    this.#clearValidationError();
     this.#createRow(gestureValue, this.#getOperationLabel(operationValue));
     gestureInput.value = '';
     await this.#storage.saveGesturesAsync(deserializedGestureValue, operationValue);
@@ -300,8 +297,8 @@ export class PopupHandler {
     const allGestures = await this.#storage.getAllGesturesAsync();
     for (const gesture in allGestures) {
       if (Object.hasOwnProperty.call(allGestures, gesture)) {
-        const eventValue = allGestures[gesture];
-        this.#createRow(this.#gesturesSerializer.serialize(gesture), this.#getOperationLabel(eventValue));
+        const operationKey = allGestures[gesture];
+        this.#createRow(this.#gesturesSerializer.serialize(gesture), this.#getOperationLabel(operationKey));
       }
     }
   }
@@ -311,38 +308,48 @@ export class PopupHandler {
   }
 
   #showValidationError(message, gestureInput) {
-    this.#showMessage(message);
+    document.querySelector('.field-error').textContent = message;
     gestureInput.focus();
   }
 
-  #showMessage(message) {
-    alert(message);
+  #clearValidationError() {
+    document.querySelector('.field-error').textContent = '';
   }
 
-  #createRow(gestureValue, eventValue) {
+  #showBackupMessage(message, isError) {
+    const messageElement = document.querySelector('#backup-message');
+    messageElement.textContent = message;
+    messageElement.classList.toggle('error', isError);
+    messageElement.classList.toggle('success', !isError);
+  }
+
+  #clearBackupMessage() {
+    const messageElement = document.querySelector('#backup-message');
+    messageElement.textContent = '';
+    messageElement.classList.remove('error', 'success');
+  }
+
+  #createRow(gestureValue, operationLabel) {
     const row = document.createElement('div');
     row.className = 'row';
     row.dataset.gestureValue = gestureValue;
 
+    const gestureChip = document.createElement('span');
+    gestureChip.className = 'gesture-chip';
+    gestureChip.textContent = gestureValue;
+    row.append(gestureChip);
+
+    const operationText = document.createElement('span');
+    operationText.textContent = operationLabel;
+    row.append(operationText);
+
     const deleteButton = document.createElement('button');
-    deleteButton.className = 'delete-button';
-    deleteButton.textContent = 'Delete';
+    deleteButton.className = 'delete-button icon-button';
+    deleteButton.setAttribute('aria-label', `Delete gesture ${gestureValue}`);
+    deleteButton.innerHTML =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>';
     this.#registerDeleteButtonEvent(deleteButton);
     row.append(deleteButton);
-
-    const gestureParagraph = document.createElement('p');
-    gestureParagraph.textContent = 'Gesture: ';
-    const gestureValueText = document.createElement('b');
-    gestureValueText.textContent = gestureValue;
-    gestureParagraph.append(gestureValueText);
-    row.append(gestureParagraph);
-
-    const eventParagraph = document.createElement('p');
-    eventParagraph.textContent = 'Event: ';
-    const eventValueText = document.createElement('b');
-    eventValueText.textContent = eventValue;
-    eventParagraph.append(eventValueText);
-    row.append(eventParagraph);
 
     document.querySelector('.tab[data-name="gestures"] .list-content').append(row);
   }

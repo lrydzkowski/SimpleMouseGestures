@@ -21,7 +21,7 @@ Export and Import actions.
 
 The popup Backup tab SHALL provide an Export action that downloads a JSON file containing the format version, all stored
 gesture→operation mappings in storage form, and the stored line settings. The exported values MUST come from
-`chrome.storage.local`, not from unsaved UI input state.
+`chrome.storage.local`, which is the single source of truth now that line settings persist automatically on change.
 
 #### Scenario: Successful export
 
@@ -29,11 +29,11 @@ gesture→operation mappings in storage form, and the stored line settings. The 
 - **THEN** a file named `simple-mouse-gestures-backup.json` is downloaded containing `version: 1`, the full stored
   gesture map, and the stored `lineColor` and `lineWidth`
 
-#### Scenario: Unsaved UI changes are not exported
+#### Scenario: Export reflects auto-saved settings
 
-- **WHEN** the user changes the line color input in the Settings tab without clicking Save and then clicks Export in the
-  Backup tab
-- **THEN** the downloaded file contains the line color currently persisted in storage, not the unsaved input value
+- **WHEN** the user changes the line color in the Settings tab (the picker commits the value) and then clicks Export in
+  the Backup tab
+- **THEN** the downloaded file contains the newly committed line color, because it was persisted automatically on change
 
 ### Requirement: Import replaces all configuration
 
