@@ -37,16 +37,11 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: npm run zip
 
-      - name: Read extension version
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        id: version
-        run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
-
       - name: Upload store zip artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v7
         with:
-          name: SimpleMouseGestures-${{ steps.version.outputs.version }}
           path: .output/*-chrome.zip
           if-no-files-found: error
           include-hidden-files: true
+          archive: false
