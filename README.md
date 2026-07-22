@@ -46,6 +46,33 @@ for gestures. To open the context menu on these systems, right click twice in qu
 half a second) without moving the mouse. On Windows nothing changes: a plain right click opens the context menu as
 usual.
 
+## Development
+
+The extension is written in TypeScript and built with [WXT](https://wxt.dev). Node.js 24+ is required.
+
+```shell
+npm ci
+npm run dev
+```
+
+`npm run dev` builds the extension, opens a browser with it loaded, and rebuilds on changes. To load it manually
+instead, run `npm run build` and load `.output/chrome-mv3` as an unpacked extension via `chrome://extensions` (Developer
+mode → Load unpacked).
+
+Other scripts:
+
+- `npm run typecheck` — TypeScript type checking
+- `npm test` — unit tests (Vitest)
+- `npm run format` / `npm run format:check` — Prettier
+- `npm run zip` — build the Chrome Web Store zip into `.output/`
+
+## Release
+
+Bump `version` in `package.json` and `version_name` in `wxt.config.ts`, then merge the version branch to `master`. The
+CI workflow builds, tests, and uploads the store-ready zip as a workflow artifact named `SimpleMouseGestures-<version>`;
+download it from the workflow run and upload it to the Chrome Web Store.
+
 ## Dependencies
 
-It uses [Coloris v0.22.0](https://github.com/mdbassit/Coloris) to choose a line color in settings.
+It uses [Coloris](https://github.com/mdbassit/Coloris) (via the
+[@melloware/coloris](https://www.npmjs.com/package/@melloware/coloris) npm package) to choose a line color in settings.

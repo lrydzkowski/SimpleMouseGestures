@@ -1,1 +1,4 @@
-/popup/dependencies
+node_modules/
+.output/
+.wxt/
+package-lock.json

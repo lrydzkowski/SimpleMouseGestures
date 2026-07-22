@@ -1,1 +1,3 @@
-SimpleMouseGestures*.zip
+node_modules/
+.output/
+.wxt/

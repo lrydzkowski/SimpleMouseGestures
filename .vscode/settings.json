@@ -1,6 +1,7 @@
 {
   "cSpell.words": ["Coloris"],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "files.eol": "\n",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
