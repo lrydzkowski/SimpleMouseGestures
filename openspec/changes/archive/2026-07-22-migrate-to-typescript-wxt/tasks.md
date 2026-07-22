@@ -29,7 +29,7 @@
       design D4 if the API drifted)
 - [x] 2.6 Run `npm run typecheck` clean; run `npm run build`; diff `.output/chrome-mv3/manifest.json` against the legacy
       `manifest.json` for field parity (content-script `js` list excepted)
-- [ ] 2.7 Manual smoke test of the built extension: draw gestures (each direction), execute a mapped operation,
+- [x] 2.7 Manual smoke test of the built extension: draw gestures (each direction), execute a mapped operation,
       selected-text and link operations, popup tabs (Gestures/Settings/Backup), line settings applied to the trail,
       export/import round trip, context-menu suppression behavior
 
@@ -52,7 +52,7 @@
       `wxt prepare` + typecheck, `prettier --check .`, `npm test`, `npm run build`
 - [x] 4.2 Add master-only zip step (`npm run zip` + `actions/upload-artifact` named with the package version, guarded by
       `github.event_name == 'push' && github.ref == 'refs/heads/master'`)
-- [ ] 4.3 Push the branch and verify the workflow passes and uploads no zip; after merge to master, verify the zip
+- [x] 4.3 Push the branch and verify the workflow passes and uploads no zip; after merge to master, verify the zip
       artifact appears (or verify the guard beforehand with a temporary workflow run on a test basis)
 
 ## 5. Cleanup and documentation
