@@ -3,6 +3,7 @@ import type { Settings } from '../../shared/types';
 import { OperationResolver } from '../../service-worker-scripts/operation-resolver';
 import { Storage } from './storage';
 import { GesturesSerializer } from './gestures-serializer';
+import { GestureInputSanitizer } from './gesture-input-sanitizer';
 import { BackupHandler } from './backup-handler';
 
 interface OperationOption {
@@ -13,11 +14,18 @@ interface OperationOption {
 export class PopupHandler {
   #storage: Storage;
   #gesturesSerializer: GesturesSerializer;
+  #gestureInputSanitizer: GestureInputSanitizer;
   #backupHandler: BackupHandler;
 
-  constructor(storage: Storage, gesturesSerializer: GesturesSerializer, backupHandler: BackupHandler) {
+  constructor(
+    storage: Storage,
+    gesturesSerializer: GesturesSerializer,
+    gestureInputSanitizer: GestureInputSanitizer,
+    backupHandler: BackupHandler,
+  ) {
     this.#storage = storage;
     this.#gesturesSerializer = gesturesSerializer;
+    this.#gestureInputSanitizer = gestureInputSanitizer;
     this.#backupHandler = backupHandler;
   }
 
@@ -61,6 +69,7 @@ export class PopupHandler {
   #registerEvents() {
     this.#registerTabEvent();
     this.#registerAddButtonEvent();
+    this.#registerHelpButtonEvent();
     this.#registerGestureInputEvent();
     this.#registerDeleteButtonsEvent();
     this.#registerSettingsAutoSaveEvents();
@@ -99,11 +108,35 @@ export class PopupHandler {
     });
   }
 
+  #registerHelpButtonEvent() {
+    const helpButton = document.querySelector<HTMLButtonElement>('.help-button')!;
+    const helpDialog = document.querySelector<HTMLDialogElement>('#help-dialog')!;
+    helpButton.addEventListener('click', () => {
+      helpDialog.showModal();
+    });
+  }
+
   #registerGestureInputEvent() {
     const gestureInput = document.querySelector<HTMLInputElement>('.gesture-input')!;
     gestureInput.addEventListener('keydown', async (event) => {
       await this.#handleGestureInputEventAsync(event);
     });
+    gestureInput.addEventListener('input', () => {
+      this.#sanitizeGestureInput(gestureInput);
+    });
+  }
+
+  #sanitizeGestureInput(gestureInput: HTMLInputElement) {
+    const value = gestureInput.value;
+    const sanitizedValue = this.#gestureInputSanitizer.sanitize(value);
+    if (sanitizedValue === value) {
+      return;
+    }
+
+    const caretPosition = gestureInput.selectionStart ?? value.length;
+    const sanitizedCaretPosition = this.#gestureInputSanitizer.sanitize(value.slice(0, caretPosition)).length;
+    gestureInput.value = sanitizedValue;
+    gestureInput.setSelectionRange(sanitizedCaretPosition, sanitizedCaretPosition);
   }
 
   #registerDeleteButtonsEvent() {
