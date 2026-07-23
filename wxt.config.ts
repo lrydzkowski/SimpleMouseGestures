@@ -9,7 +9,7 @@ export default defineConfig({
     name: 'Simple Mouse Gestures',
     description:
       'Extension that provides the ability to define mouse gestures that will run specific actions in your Google Chrome browser',
-    version_name: '0.9.0 beta',
+    version_name: '1.0.0',
     author: { email: 'lukasz.rydzkowski@gmail.com' },
     icons: {
       16: 'images/icon-16.png',
